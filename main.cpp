@@ -1,15 +1,28 @@
-#include "task.h"
-#include "recurrenttask.h"
-#include "transienttask.h"
-#include "timeblock.h"
-#include "boost/date_time.hpp"
+#include "includes.h"
+#include "json.hpp"
 
 #include <utility>
 
 using namespace std;
+using nlohmann::json;
 
+void testJSON(string fname)
+{
+    ifstream infile(fname);
+    json js = json::parse(infile);
 
+    cout << js.dump(2) << endl;
 
+    //Extracts each task from the json task lists
+    //In this for loop, the *it returns the task information in braces
+    for(json::iterator it = js.begin(); it != js.end(); it++)
+    {
+        json temp = *it;
+        cout << temp.dump(2) << endl;
+        cout << "Name: " << temp["Name"] << endl;
+    }
+
+}
 void printTask(TimeBlock* tb_array, int tb_array_size)
 {
     cout << "Task Name: " << tb_array[0].get_task()->get_name() << endl;
@@ -29,6 +42,9 @@ void printTask(TimeBlock* tb_array, int tb_array_size)
 int main()
 {
 
+    testJSON("tasks.json");
+
+    return 0;
     {
         // testing timeblock
 
@@ -82,7 +98,7 @@ int main()
 
         //b- check if time and name are available
 
-        string newEndDate = "20210430";
+        std::string newEndDate = "20210430";
 
         Task* newTask2 = new RecurrentTask(new_name, new_startDate,
             new_startTime, new_duration, newEndDate, RecurrentTask::Weekly, RecurrentTask::Exercise);
