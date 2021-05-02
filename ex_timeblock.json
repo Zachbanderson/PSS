@@ -1,0 +1,56 @@
+{
+	20200415:
+	[
+		10.25:
+		{
+			name: "Go to Store for socks"
+		}
+		10.50:
+		{
+			name: "Go to Store for socks"
+		}
+		10.75:
+		{
+			name: "Go to Store for socks"
+		}
+		11.00:
+		{
+			name: "Go to Store for socks"
+		}
+		11.25: 
+		{
+			name: "Take a walk"
+		}
+		11.50: 
+		{
+			name: "Take a walk"
+		}
+		11.75: 
+		{
+			name: "Take a walk"
+		}
+		12.00: 
+		{
+			name: "Take a walk"
+		}
+	]
+	20200416:
+	{
+		11.25: 
+		{
+			name: "Take a walk"
+		}
+		11.50: 
+		{
+			name: "Take a walk"
+		}
+		11.75: 
+		{
+			name: "Take a walk"
+		}
+		12.00: 
+		{
+			name: "Take a walk"
+		}
+	}
+}
