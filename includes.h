@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
 #include "boost/date_time.hpp"
 
 #include "task.h"

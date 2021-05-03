@@ -27,6 +27,8 @@ public:
 	double getStartTime() const;
 	double getDuration() const;
 	std::string getType() const;
+    virtual void display() const;							// print protected member variables
+    virtual std::string serialize() const;
 
 	/**************
 	 ** MUTATORS **
@@ -36,7 +38,7 @@ public:
 	void setStartTime(double newStartTime);					// set start time of task
 	void getDuration(double newDuration);					// set duration of task
 	virtual void setType(int choice) = 0;					// set type of task
-	virtual void display() const;							// print protected member variables
+
 
 	~Task();
 
@@ -119,6 +121,26 @@ protected:
 	*   Return: string-name of TaskType in string form of the Task
 	*******************************************************************/
 
+    /*******************************************************************
+    * virtual void display() const;
+    *
+    *   Virtual Method; prints all protected member variables of the Task
+    *------------------------------------------------------------------
+    *   Parameter: None
+    *------------------------------------------------------------------
+    *   Return: none
+    *******************************************************************/
+
+    /*******************************************************************
+    * virtual string serialize() const;
+    *
+    *   Virtual Method; serializes information into a json string
+    *------------------------------------------------------------------
+    *   Parameter: None
+    *------------------------------------------------------------------
+    *   Return: string-serialized task information
+    *******************************************************************/
+
 	/**************
 	** MUTATORS **
 	**************/
@@ -169,16 +191,6 @@ protected:
 	*   Virtual Method; sets the TaskType of the task
 	*------------------------------------------------------------------
 	*   Parameter: choice(int)-The enum int to change the type to
-	*------------------------------------------------------------------
-	*   Return: none
-	*******************************************************************/
-
-	/*******************************************************************
-	* virtual void display() const;
-	*
-	*   Virtual Method; prints all protected member variables of the Task
-	*------------------------------------------------------------------
-	*   Parameter: None
 	*------------------------------------------------------------------
 	*   Return: none
 	*******************************************************************/

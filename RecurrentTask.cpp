@@ -50,7 +50,16 @@ void RecurrentTask::display() const
 	cout << "Start Time: " << startTime << endl;
 	cout << "Duration: " << duration << endl;
 	cout << "Frequency: " << static_cast<int>(freq) << endl;
-	cout << "Type: " << getType() << endl;
+    cout << "Type: " << getType() << endl;
+}
+
+string RecurrentTask::serialize() const
+{
+    return "{\"Name\":\"" + name + "\",\"StartDate\":" + startDate +
+            ",\"Type\":\"" + getType() + "\",\"StartTime\":" +
+            to_string(startTime) + ",\"Duration\":" + to_string(duration)
+            + ",\"EndDate\":" + endDate + ",\"Frequency\":" +
+            to_string(static_cast<int>(freq)) + "}";
 }
 
 RecurrentTask::~RecurrentTask()

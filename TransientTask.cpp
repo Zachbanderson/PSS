@@ -1,5 +1,5 @@
 #include <iostream>
-#include "TransientTask.h"
+#include "transienttask.h"
 
 using namespace std;
 
@@ -28,7 +28,7 @@ void TransientTask::display() const
 	cout << "Start Date: " << startDate << endl;
 	cout << "Start Time: " << startTime << endl;
 	cout << "Duration: " << duration << endl;
-	cout << "Type: " << getType() << endl;
+    cout << "Type: " << getType() << endl;
 }
 
 TransientTask::~TransientTask()

@@ -124,7 +124,7 @@ void System::displayCalendar()
  *     This function returns true if the task is valid. False
  *     otherwise
  ***********************************************************/
-bool System::validateTask(Task task)
+bool System::validateTask(Task* task)
 {
     return true;
 }

@@ -1,7 +1,9 @@
 #ifndef TRANSIENTTASK_H
 #define TRANSIENTTASK_H
 
-#include "Task.h"
+#include "task.h"
+
+using std::string;
 
 class TransientTask : public Task
 {
@@ -11,8 +13,8 @@ public:
 		double newStartTime, double newDuration, TaskTypes newType)
 		: Task(newName, newStartDate, newStartTime, newDuration, newType) {}
 
-	void setType(int choice);		// set type of task
-	void display() const;			// print protected member variables
+    void setType(int choice) override;		// set type of task
+    void display() const override;			// print protected member variables
 
 	~TransientTask();
 };
@@ -34,6 +36,20 @@ public:
 	*		TaskTypes newType - Type of task
 	*   Return: none
 	***************************************************************/
+
+    /***************
+    ** ACCESSORS **
+    ***************/
+
+    /*******************************************************************
+    * virtual string serialize() const;
+    *
+    *   Virtual Method; serializes information into a json string
+    *------------------------------------------------------------------
+    *   Parameter: None
+    *------------------------------------------------------------------
+    *   Return: string-serialized task information
+    *******************************************************************/
 
 	/**************
 	** MUTATORS **

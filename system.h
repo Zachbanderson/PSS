@@ -1,8 +1,9 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include <vector>
-#include "task.h"
+#include "includes.h"
+
+using namespace std;
 
 class System
 {
@@ -23,7 +24,7 @@ private:
     /***************
      ** ACCESSORS **
      ***************/
-    bool validateTask(Task task);   //Task to validate
+    bool validateTask(Task* task);   //Task to validate
 
     /**************
      ** MUTATORS **

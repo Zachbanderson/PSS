@@ -1,7 +1,9 @@
 #ifndef RECURRENTTASK_H
 #define RECURRENTTASK_H
 
-#include "Task.h"
+#include "task.h"
+
+using std::string;
 
 class RecurrentTask : public Task
 {
@@ -14,7 +16,7 @@ public:
 	RecurrentTask();
 	RecurrentTask(const std::string& newName, const std::string& newStartDate,		//name, startDate, startTime, duration, type, endDate, freq
 		double newStartTime, double newDuration, TaskTypes newType,
-		const std::string& newEndDate, Frequency newFreq)
+        const std::string newEndDate, Frequency newFreq)
 		: Task(newName, newStartDate, newStartTime, newDuration, newType) 
 	{
 		endDate = newEndDate;
@@ -30,8 +32,9 @@ public:
 	void setFreq(int newFreq);								// set freq of task (only accepts 1 or 7)
 
 	// Virtual stuff
-	void setType(int choice);								// set type of task
-	void display() const;									// print protected private member variablers
+    void setType(int choice) override;                      // set type of task
+    void display() const override;                          // print protected private member variablers
+    string serialize() const override;
 
 	~RecurrentTask();
 
@@ -84,6 +87,16 @@ private:
 	*------------------------------------------------------------------
 	*   Return: int-frequency of task in integer form
 	*******************************************************************/
+
+    /*******************************************************************
+    * virtual string serialize() const;
+    *
+    *   Virtual Method; serializes information into a json string
+    *------------------------------------------------------------------
+    *   Parameter: None
+    *------------------------------------------------------------------
+    *   Return: string-serialized task information
+    *******************************************************************/
 
 	/**************
 	** MUTATORS **

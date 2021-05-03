@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Task.h"
+#include "task.h"
 
 using namespace std;
 
@@ -68,37 +68,26 @@ string Task::getType() const
 	{
 	case Cancellation:
 		return "Cancellation";
-		break;
 	case Class:
 		return "Class";
-		break;
 	case Study:
 		return "Study";
-		break;
 	case Sleep:
 		return "Sleep";
-		break;
 	case Exercise:
 		return "Exercise";
-		break;
 	case Work:
 		return "Work";
-		break;
 	case Meal:
 		return "Meal";
-		break;
 	case Visit:
 		return "Visit";
-		break;
 	case Shopping:
 		return "Shopping";
-		break;
 	case Appointment:
 		return "Appointment";
-		break;
 	default:
 		return "Error";
-		break;
 	}
 }
 
@@ -109,7 +98,14 @@ void Task::display() const
 	cout << "Start Date: " << startDate << endl;
 	cout << "Start Time: " << startTime << endl;
 	cout << "Duration: " << duration << endl;
-	cout << "Type: " << getType() << endl;
+    cout << "Type: " << getType() << endl;
+}
+
+string Task::serialize() const
+{
+    return "{\"Name\":\"" + name + "\",\"Date\":" + startDate +
+            ",\"Type\":\"" + getType() + "\",\"StartTime\":" + to_string(startTime)
+            + ",\"Duration\":" + to_string(duration) + "}";
 }
 
 Task::~Task()
