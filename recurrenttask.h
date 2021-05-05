@@ -36,7 +36,7 @@ public:
     void display() const override;                          // print protected private member variablers
     string serialize() const override;
 
-	~RecurrentTask();
+    ~RecurrentTask() override{}
 
 private:
 	std::string endDate;

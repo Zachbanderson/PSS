@@ -16,7 +16,7 @@ public:
     void setType(int choice) override;		// set type of task
     void display() const override;			// print protected member variables
 
-	~TransientTask();
+    ~TransientTask() override {}
 };
 
 	/******************************

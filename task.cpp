@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Task.h"
+#include "task.h"
 
 using namespace std;
 
@@ -271,23 +271,24 @@ void Task::display() const
 	cout << "Start Date: " << startDate << endl;
 	cout << "Start Time: " << startTime << endl;
 	cout << "Duration: " << duration << endl;
-	cout << "Type: " << getType() << endl;
+    cout << "Type: " << getType() << endl;
 }
 
 /**********************************************************
  *
- * Destructor Task: Class Task
- *_________________________________________________________
- * This method is the destructor for the Task
+ * Method serialize(): Class Recurrent______________________________
+ * This method serializes the task information to JSON string
  *_________________________________________________________
  * PRE-CONDITIONS
- *     none
+ *     None
  *
  * POST-CONDITIONS
- *     This function will destroy a Task
+ *     string-Formats the Name, Date, Type, StartTime, and
+ *     Duration as a JSON string
  ***********************************************************/
-
-Task::~Task()
+string Task::serialize() const
 {
-
+    return "{\"Name\":\"" + name + "\",\"Date\":" + startDate + ",\"Type\":\"" +
+            getType() + "\",\"StartTime\":" + to_string(startTime)
+            + ",\"Duration\":" + to_string(duration) + "}";
 }

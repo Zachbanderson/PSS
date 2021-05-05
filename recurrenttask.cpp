@@ -1,5 +1,5 @@
 #include <iostream>
-#include "RecurrentTask.h"
+#include "recurrenttask.h"
 
 using namespace std;
 
@@ -135,7 +135,6 @@ void RecurrentTask::setFreq(int newFreq)
  *     Prints the name, start date, end date, start time,
  *	   duration, frequency and type of task
  ***********************************************************/
-
 void RecurrentTask::display() const
 {
 	cout << "This is a [Recurrent] Task" << endl;
@@ -145,23 +144,27 @@ void RecurrentTask::display() const
 	cout << "Start Time: " << startTime << endl;
 	cout << "Duration: " << duration << endl;
 	cout << "Frequency: " << static_cast<int>(freq) << endl;
-	cout << "Type: " << getType() << endl;
+    cout << "Type: " << getType() << endl;
 }
 
 /**********************************************************
  *
- * Destructor RecurrentTask: Class RecurrentTask
+ * Method serialize(): Class RecurrentTask
  *_________________________________________________________
- * This method is the destructor for the RecurrentTask
+ * This method serializes the task information to JSON string
  *_________________________________________________________
  * PRE-CONDITIONS
- *     none
+ *     None
  *
  * POST-CONDITIONS
- *     This function will destroy a RecurrentTask
+ *     string-Formats the name, startDate, Type, StartTime,
+ *     EndDate, Duration, and Frequency as a JSON string
  ***********************************************************/
-
-RecurrentTask::~RecurrentTask()
+string RecurrentTask::serialize() const
 {
-
+    return "{\"Name\":\"" + name + "\",\"StartDate\":" + startDate +
+            ",\"Type\":\"" + getType() + "\",\"StartTime\":" +
+            to_string(startTime) + ",\"Duration\":" + to_string(duration)
+            + ",\"EndDate\":" + endDate + ",\"Frequency\":" +
+            to_string(static_cast<int>(freq)) + "}";
 }

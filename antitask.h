@@ -1,7 +1,7 @@
 #ifndef ANTITASK_H
 #define ANTITASK_H
 
-#include "Task.h"
+#include "task.h"
 
 class AntiTask : public Task
 {
@@ -11,9 +11,9 @@ public:
 		double newStartTime, double newDuration)
 		: Task(newName, newStartDate, newStartTime, newDuration, Task::Cancellation) {}
 
-	void setType(int choice);
-	void display() const;			// print protected member variables
-	~AntiTask();
+    void setType(int choice) override;
+    void display() const override;			// print protected member variables
+    ~AntiTask() override;
 };
 
 	/******************************

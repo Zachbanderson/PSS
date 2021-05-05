@@ -1,8 +1,11 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
-#include <iostream>
-#include "task.h"
-#include "timeblock.h"
+
+#include "includes.h"
+#include "json.hpp"
+
+using namespace std;
+using nlohmann::json;
 
 class Calendar
 {
@@ -11,6 +14,7 @@ class Calendar
 public:
 
     Calendar();
+    ~Calendar();
     
     vector<TimeBlock> createTimeBlocks(Task* task);  //Create vector of timeblocks --option: either return array or directly write to JSON
 
@@ -23,6 +27,15 @@ public:
     // bool nameAvailable(Task task);   //dont need, System does this
     bool dateAvailable(string date);    //date to check if available
     bool timeAvailable(float time);    //starting time to check if available
+    void printTasks();
+
+private:
+    std::map<string, Task*> taskMap;    //Stores the tasks
+    //Used to check if a task is valid
+    std::map<string, std::map<string, TimeBlock>> validMap;
+    string dataName = "data.json";
+
+    int convertTypeToInt(string type);
 };
 
 #endif // CALENDAR_H

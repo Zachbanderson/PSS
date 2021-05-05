@@ -1,5 +1,5 @@
 #include <iostream>
-#include "TransientTask.h"
+#include "transienttask.h"
 
 using namespace std;
 
@@ -70,22 +70,4 @@ void TransientTask::display() const
 	cout << "Start Time: " << startTime << endl;
 	cout << "Duration: " << duration << endl;
 	cout << "Type: " << getType() << endl;
-}
-
-/**********************************************************
- *
- * Destructor TransientTask: Class TransientTask
- *_________________________________________________________
- * This method is the destructor for the TransientTask
- *_________________________________________________________
- * PRE-CONDITIONS
- *     none
- *
- * POST-CONDITIONS
- *     This function will destroy an TransientTask
- ***********************************************************/
-
-TransientTask::~TransientTask()
-{
-
 }
