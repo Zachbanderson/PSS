@@ -2,7 +2,7 @@
 
 #include "includes.h"
 #include "json.hpp"
-#include "Calendar.h"
+#include "calendar.h"
 
 
 using namespace std;
@@ -158,7 +158,7 @@ int main()
     //Testing reading/writing JSON
     {
         Calendar c;
-        c.readFromFile();
+        //c.readFromFile();
         c.printTasks();
         c.writeToFile();
 

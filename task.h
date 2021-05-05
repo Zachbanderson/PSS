@@ -2,6 +2,9 @@
 #define TASK_H
 
 #include <string>
+#include "boost/date_time.hpp"
+
+using namespace boost::gregorian;
 
 class Task
 {
@@ -23,7 +26,7 @@ public:
 	 ** ACCESSORS **
 	 ***************/
 	std::string getName() const;
-	std::string getStartDate() const;
+    date getStartDate() const;
 	double getStartTime() const;
 	double getDuration() const;
 	std::string getType() const;
@@ -34,7 +37,7 @@ public:
 	 ** MUTATORS **
 	 **************/
 	void setName(const std::string& newName);				// set name of task
-	void setStartDate(const std::string& newStartDate);		// set start date of task
+    void setStartDate(const date newStartDate);		// set start date of task
 	void setStartTime(double newStartTime);					// set start time of task
     void setDuration(double newDuration);					// set duration of task
 	virtual void setType(int choice) = 0;					// set type of task
@@ -44,7 +47,7 @@ public:
 
 protected:
 	std::string name;
-	std::string startDate;
+    date startDate;
 	double startTime;
 	double duration;
 	TaskTypes type;

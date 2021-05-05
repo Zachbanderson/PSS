@@ -1,15 +1,15 @@
 #include <stdexcept>
 #include "boost/date_time.hpp"
-#include "Calendar.h"
+#include "calendar.h"
 
 using namespace std;
-//TO-DO: Load from JSON file into memory
+
 //TO-DO: Make function addTask (diff function for transient/recurrent tasks
 //          to add task to the map in the JSON
 
 Calendar::Calendar()
 {
-
+    readFromFile();
 }
 
 /**********************************************************
@@ -27,7 +27,6 @@ Calendar::Calendar()
  ***********************************************************/
 Calendar::~Calendar()
 {
-    cout << "In destructor" << endl << endl;
     for(std::map<string, Task*>::iterator it = taskMap.begin();
         it != taskMap.end(); it++)
     {
@@ -35,10 +34,8 @@ Calendar::~Calendar()
         {
             cout << "Is null pointer" << endl;
         }
-        it->second->display();
         delete it->second;
     }
-    //cout << "We didn't crash" << endl;
 }
 
 //TO-DO: Just create time blocks in memory
@@ -117,6 +114,7 @@ void Calendar::readFromFile()
     for(json::iterator it = info.begin(); it != info.end(); it++)
     {
         json tempJSON = *it;
+
 //        cout << tempJSON.dump(2) << endl;
 //        cout << tempJSON.dump() << endl;
         string name = tempJSON["Name"];
@@ -145,8 +143,18 @@ void Calendar::readFromFile()
                                                  to_string(endDate),
                             static_cast<RecurrentTask::Frequency>(frequency));
             taskMap.insert(std::pair<string, Task*>(name, r));
-            //r->display();
-            //r = nullptr;
+
+//            cout << "Start date is:" << r->getStartDate() << endl;
+//            cout << "End date is:" << r->getEndDate() << endl;
+
+            //Looping through all the dates in the recurring task and adding
+            //them to the validity map
+            for(boost::gregorian::date d = r->getStartDate();
+                d <= r->getEndDate(); d = d + date_duration(frequency))
+            {
+                //cout << "Date is: " << d << endl;
+                addTaskToValid(d);
+            }
 
         }
         else
@@ -158,11 +166,57 @@ void Calendar::readFromFile()
                                                  static_cast<Task::TaskTypes>
                                                  (convertTypeToInt(type)));
             taskMap.insert(std::pair<string, Task*>(name, t));
-            //t->display();
-            //t = nullptr;
+            addTaskToValid(t->getStartDate());
         }
     }
+    cout << "Printing valid map" << endl;
+    printValid();
+}
 
+/**********************************************************
+ *
+ * Method addTaskToValid(): Class Calendar
+ *_________________________________________________________
+ * This method populates TimeBlocks in the validMap based on
+ * the date it appears
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     date(boost::gregorian::date)-The date of the task
+ *
+ * POST-CONDITIONS
+ *     This function populates the validity map. Returns true
+ *     if the date is valid. False otherwise
+ ***********************************************************/
+bool Calendar::addTaskToValid(date date)
+{
+    string taskYear = boost::lexical_cast<string>(date.year());
+    string taskDay = boost::lexical_cast<string>(date.day_of_year());
+
+    //If we haven't found a task with this year yet
+    if(validMap.find(taskYear) == validMap.end())
+    {
+        //Inserting a blank map at the year mark
+        validMap.insert(std::pair<string, std::map<string, TimeBlock>>
+                        (taskYear, std::map<string, TimeBlock>()));
+        //Creating an empty array of TimeBlocks at the day of the year
+        validMap.at(taskYear).insert(std::pair<string, TimeBlock>(taskDay,
+                                                                  TimeBlock()));
+
+    }
+    //If the year is in the map but the day isn't
+    else if(validMap.at(taskYear).find(taskDay) == validMap.at(taskYear).end())
+    {
+        validMap.at(taskYear).insert(std::pair<string, TimeBlock>(taskDay,
+                  TimeBlock()));
+    }
+
+    //Call function to populate TimeBlocks here. Have the function return true
+    //if it can be added. False otherwise
+    ///validMap.at(taskYear).at(taskDay).populate(start, end);
+
+
+    //Returning false means that the task wasn't added
+    return false;
 }
 
 void Calendar::timeBlockDisplay() 
@@ -180,12 +234,54 @@ bool Calendar::timeAvailable(float time)
     return false;
 }
 
+/**********************************************************
+ *
+ * Method printTasks(): class Calendar
+ *_________________________________________________________
+ * This function prints all tasks in the calendar
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     none
+ *
+ * POST-CONDITIONS
+ *     This function prints all the tasks in the taskMap
+ ***********************************************************/
 void Calendar::printTasks()
 {
     for(std::map<string, Task*>::iterator it = taskMap.begin();
         it != taskMap.end(); it++)
     {
         it->second->display();
+    }
+}
+
+/**********************************************************
+ *
+ * Method printValid(): class Calendar
+ *_________________________________________________________
+ * This function prints the map that checks if a task is valid
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     none
+ *
+ * POST-CONDITIONS
+ *     This function prints the years and days that are in the valid map
+ ***********************************************************/
+void Calendar::printValid()
+{
+    for(std::map<string, std::map<string, TimeBlock>>::iterator
+        it = validMap.begin(); it != validMap.end(); it++)
+    {
+        //Printing out the year and the days that tasks happen in that year
+        cout << it->first << ": ";
+        cout << it->second.begin()->first;
+        std::map<string, TimeBlock>::iterator it2;
+        for(std::map<string, TimeBlock>::iterator it2 =
+            std::next(it->second.begin()); it2 != it->second.end(); it2++)
+        {
+            cout << ", " << it2->first;
+        }
+        cout << endl;
     }
 }
 

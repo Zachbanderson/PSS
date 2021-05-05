@@ -61,7 +61,7 @@ void RecurrentTask::setType(int choice)
  *     Returns endDate
  ***********************************************************/
 
-string RecurrentTask::getEndDate() const
+date RecurrentTask::getEndDate() const
 {
 	return endDate;
 }
@@ -99,7 +99,7 @@ int RecurrentTask::getFreq() const
 
 void RecurrentTask::setEndDate(const string& newEndDate)
 {
-	endDate = newEndDate;
+    endDate = date_from_iso_string(newEndDate);
 }
 
 /**********************************************************
@@ -162,9 +162,9 @@ void RecurrentTask::display() const
  ***********************************************************/
 string RecurrentTask::serialize() const
 {
-    return "{\"Name\":\"" + name + "\",\"StartDate\":" + startDate +
-            ",\"Type\":\"" + getType() + "\",\"StartTime\":" +
-            to_string(startTime) + ",\"Duration\":" + to_string(duration)
-            + ",\"EndDate\":" + endDate + ",\"Frequency\":" +
-            to_string(static_cast<int>(freq)) + "}";
+    return "{\"Name\":\"" + name + "\",\"StartDate\":" +
+            to_iso_string(startDate) + ",\"Type\":\"" + getType()
+            + "\",\"StartTime\":" + to_string(startTime) + ",\"Duration\":" +
+            to_string(duration) + ",\"EndDate\":" + to_iso_string(endDate)
+            + ",\"Frequency\":" + to_string(static_cast<int>(freq)) + "}";
 }

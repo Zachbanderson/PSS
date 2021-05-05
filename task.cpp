@@ -19,7 +19,7 @@ using namespace std;
 Task::Task()
 {
 	name = "N/A";
-	startDate = "00000000";
+    startDate = date();
 	startTime = 00.00;
 	duration = 00.00;
 	type = Class;
@@ -47,7 +47,7 @@ Task::Task(const std::string& newName, const std::string& newStartDate,
 	double newStartTime, double newDuration, TaskTypes newType)
 {
 	name = newName;
-	startDate = newStartDate;
+    startDate = date_from_iso_string(newStartDate);
 	startTime = newStartTime;
 	duration = newDuration;
 	type = newType;
@@ -84,7 +84,7 @@ string Task::getName() const
  *     Returns startDate
  ***********************************************************/
 
-string Task::getStartDate() const
+date Task::getStartDate() const
 {
 	return startDate;
 }
@@ -156,7 +156,7 @@ void Task::setName(const string& newName)
  *     Nothing
  ***********************************************************/
 
-void Task::setStartDate(const string& newStartDate)
+void Task::setStartDate(const date newStartDate)
 {
 	startDate = newStartDate;
 }
@@ -216,37 +216,26 @@ string Task::getType() const
 	{
 	case Cancellation:
 		return "Cancellation";
-		break;
 	case Class:
 		return "Class";
-		break;
 	case Study:
 		return "Study";
-		break;
 	case Sleep:
 		return "Sleep";
-		break;
 	case Exercise:
 		return "Exercise";
-		break;
 	case Work:
 		return "Work";
-		break;
 	case Meal:
 		return "Meal";
-		break;
 	case Visit:
 		return "Visit";
-		break;
 	case Shopping:
 		return "Shopping";
-		break;
 	case Appointment:
 		return "Appointment";
-		break;
 	default:
 		return "Error";
-		break;
 	}
 }
 
@@ -288,7 +277,8 @@ void Task::display() const
  ***********************************************************/
 string Task::serialize() const
 {
-    return "{\"Name\":\"" + name + "\",\"Date\":" + startDate + ",\"Type\":\"" +
-            getType() + "\",\"StartTime\":" + to_string(startTime)
-            + ",\"Duration\":" + to_string(duration) + "}";
+    return "{\"Name\":\"" + name + "\",\"Date\":" +
+            to_iso_string(startDate) + ",\"Type\":\"" + getType() +
+            "\",\"StartTime\":" + to_string(startTime) + ",\"Duration\":" +
+            to_string(duration) + "}";
 }

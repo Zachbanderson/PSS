@@ -19,16 +19,16 @@ public:
         const std::string newEndDate, Frequency newFreq)
 		: Task(newName, newStartDate, newStartTime, newDuration, newType) 
 	{
-		endDate = newEndDate;
+        endDate = date_from_iso_string(newEndDate);
 		freq = newFreq;
 	}
 
 	// Accessors
-	std::string getEndDate() const;
+    date getEndDate() const;
 	int getFreq() const;									// returns frequency in integer form
 
 	// Mutators
-	void setEndDate(const std::string& newEndDate);			// set endDate of task
+    void setEndDate(const std::string& newEndDate);			// set endDate of task
 	void setFreq(int newFreq);								// set freq of task (only accepts 1 or 7)
 
 	// Virtual stuff
@@ -39,7 +39,7 @@ public:
     ~RecurrentTask() override{}
 
 private:
-	std::string endDate;
+    date endDate;
 	Frequency freq;
 };
 
