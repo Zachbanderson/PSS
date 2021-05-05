@@ -38,7 +38,7 @@ Calendar::~Calendar()
         it->second->display();
         delete it->second;
     }
-    cout << "We didn't crash" << endl;
+    //cout << "We didn't crash" << endl;
 }
 
 //TO-DO: Just create time blocks in memory
