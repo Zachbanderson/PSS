@@ -11,8 +11,10 @@ class Calendar
 public:
 
     Calendar();
-    
-    vector<TimeBlock> createTimeBlocks(Task* task);  //Create vector of timeblocks --option: either return array or directly write to JSON
+    //Create vector of timeblocks --option: either return array or directly write to JSON
+    vector<TimeBlock> createArrayOfTimeBlock(Task* task, double taskStartTime);
+    vector<boost::gregorian::date> createDateArrayForRecurrentTask(Task* task, int numOfDays);
+    void createTimeBlocksForTask(Task* task);
 
     //Possibly have antitask to remove timeblocks OR calendar will remove timeblocks
 

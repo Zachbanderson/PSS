@@ -197,6 +197,8 @@ void Task::setDuration(double newDuration)
 	duration = newDuration;
 }
 
+
+
 /**********************************************************
  *
  * Method getType() const: Class Task
@@ -248,6 +250,24 @@ string Task::getType() const
 		return "Error";
 		break;
 	}
+}
+
+/**********************************************************
+ *
+ * Method getTypeInt() const: Class Task
+ *_________________________________________________________
+ * This method returns the type of Task as enum value
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     None
+ *
+ * POST-CONDITIONS
+ *     Returns the type of task as enum value
+ ***********************************************************/
+
+int Task::getTypeInt() const
+{
+	return type;
 }
 
 /**********************************************************
