@@ -27,6 +27,7 @@ public:
 	double getStartTime() const;
 	double getDuration() const;
 	std::string getType() const;
+	int getTypeInt() const;
     virtual void display() const;							// print protected member variables
     virtual std::string serialize() const;
 
@@ -36,7 +37,7 @@ public:
 	void setName(const std::string& newName);				// set name of task
 	void setStartDate(const std::string& newStartDate);		// set start date of task
 	void setStartTime(double newStartTime);					// set start time of task
-	void getDuration(double newDuration);					// set duration of task
+	void setDuration(double newDuration);					// set duration of task
 	virtual void setType(int choice) = 0;					// set type of task
 
 
