@@ -306,6 +306,10 @@ double Task::convertTimeToDouble(int hour, int minutes, const string& abbreviati
 	{
 		hour += 12;
 	}
+	if (abbreviation == "AM" && hour == 12)
+	{
+		hour = 0;
+	}
 	double minsRounded = (double(((minutes + 15 / 2) / 15) * 15)) / 60;
 
 	return hour + minsRounded;
