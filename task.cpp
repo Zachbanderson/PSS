@@ -302,13 +302,13 @@ string Task::serialize() const
 
 double Task::convertTimeToDouble(int hour, int minutes, const string& abbreviation)
 {
+	if (hour == 12)
+	{
+		hour = 0;
+	}
 	if (abbreviation == "PM")
 	{
 		hour += 12;
-	}
-	if (abbreviation == "AM" && hour == 12)
-	{
-		hour = 0;
 	}
 	double minsRounded = (double(((minutes + 15 / 2) / 15) * 15)) / 60;
 
