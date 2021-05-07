@@ -26,24 +26,44 @@ public:
 	 ** ACCESSORS **
 	 ***************/
 	std::string getName() const;
-    date getStartDate() const;
+    	date getStartDate() const;
 	double getStartTime() const;
 	double getDuration() const;
 	std::string getType() const;
-    virtual void display() const;							// print protected member variables
-    virtual std::string serialize() const;
+    	virtual void display() const;							// print protected member variables
+    	virtual std::string serialize() const;
 
 	/**************
 	 ** MUTATORS **
 	 **************/
 	void setName(const std::string& newName);				// set name of task
-    void setStartDate(const date newStartDate);		// set start date of task
+    	void setStartDate(const date newStartDate);				// set start date of task
 	void setStartTime(double newStartTime);					// set start time of task
-    void setDuration(double newDuration);					// set duration of task
+    	void setDuration(double newDuration);					// set duration of task
 	virtual void setType(int choice) = 0;					// set type of task
 
 
-    virtual ~Task() {}
+    	virtual ~Task() {}
+	
+	// To be moved to a different class (maybe)
+	/**********************************************************
+	*
+	* Method convertTimeToDouble(int hour, int minutes, string abbreviation): Class ???
+	*_________________________________________________________
+	* This method converts American time (ex. 3:15 AM) into a double
+	* that our program can work with
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     hour: the hour of time
+	*     minutes: the minutes of the time
+	*     abbreviation: AM/PM, must be capitalized (please)
+	*
+	* POST-CONDITIONS
+	*     This function returns the time rounded to the nearest as a
+	*	   24-hour system rounded to the nearest .15 for minutes
+	***********************************************************/
+	double convertTimeToDouble(int hours, int minutes,
+		const std::string& abbreviation);
 
 protected:
     std::string name;       //Name of the task
@@ -124,25 +144,25 @@ protected:
 	*   Return: string-name of TaskType in string form of the Task
 	*******************************************************************/
 
-    /*******************************************************************
-    * virtual void display() const;
-    *
-    *   Virtual Method; prints all protected member variables of the Task
-    *------------------------------------------------------------------
-    *   Parameter: None
-    *------------------------------------------------------------------
-    *   Return: none
-    *******************************************************************/
+	/*******************************************************************
+	* virtual void display() const;
+	*
+	*   Virtual Method; prints all protected member variables of the Task
+	*------------------------------------------------------------------
+	*   Parameter: None
+	*------------------------------------------------------------------
+	*   Return: none
+	*******************************************************************/
 
-    /*******************************************************************
-    * virtual string serialize() const;
-    *
-    *   Virtual Method; serializes information into a json string
-    *------------------------------------------------------------------
-    *   Parameter: None
-    *------------------------------------------------------------------
-    *   Return: string-serialized task information
-    *******************************************************************/
+	/*******************************************************************
+	* virtual string serialize() const;
+	*
+	*   Virtual Method; serializes information into a json string
+	*------------------------------------------------------------------
+	*   Parameter: None
+	*------------------------------------------------------------------
+	*   Return: string-serialized task information
+	*******************************************************************/
 
 	/**************
 	** MUTATORS **
