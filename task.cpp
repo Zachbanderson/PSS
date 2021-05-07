@@ -282,3 +282,31 @@ string Task::serialize() const
             "\",\"StartTime\":" + to_string(startTime) + ",\"Duration\":" +
             to_string(duration) + "}";
 }
+
+/**********************************************************
+ *
+ * Method convertTimeToDouble(int hour, int minutes, string abbreviation): Class ???
+ *_________________________________________________________
+ * This method converts American time (ex. 3:15 AM) into a double
+ * that our program can work with
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     hour: the hour of time
+ *     minutes: the minutes of the time
+ *     abbreviation: AM/PM, must be capitalized (please)
+ *
+ * POST-CONDITIONS
+ *     This function returns the time rounded to the nearest as a
+ *	   24-hour system rounded to the nearest .15 for minutes
+ ***********************************************************/
+
+double Task::convertTimeToDouble(int hour, int minutes, const string& abbreviation)
+{
+	if (abbreviation == "PM")
+	{
+		hour += 12;
+	}
+	double minsRounded = (double(((minutes + 15 / 2) / 15) * 15)) / 60;
+
+	return hour + minsRounded;
+}
