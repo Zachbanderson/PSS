@@ -9,7 +9,7 @@ using namespace std;
 
 Calendar::Calendar()
 {
-    readFromFile();
+    //readFromFile();
 }
 
 /**********************************************************
@@ -25,38 +25,19 @@ Calendar::Calendar()
  * POST-CONDITIONS
  *     This function frees all memory. Returns nothing
  ***********************************************************/
-Calendar::~Calendar()
-{
-    for(std::map<string, Task*>::iterator it = taskMap.begin();
-        it != taskMap.end(); it++)
-    {
-        if(it->second == nullptr)
-        {
-            cout << "Is null pointer" << endl;
-        }
-        delete it->second;
-    }
-}
+//Calendar::~Calendar()
+//{
+//    for(std::map<string, Task*>::iterator it = taskMap.begin();
+//        it != taskMap.end(); it++)
+//    {
+//        if(it->second == nullptr)
+//        {
+//            cout << "Is null pointer" << endl;
+//        }
+//        delete it->second;
+//    }
+//}
 
-//TO-DO: Just create time blocks in memory
-vector<TimeBlock> createTimeBlocks(Task* task)
-{
-    //Check type of task
-    float increment = 0.25;
-    int tbArraySize = static_cast<int>(task->getDuration() / increment);
-    float startTime = task->getStartTime();
-    vector <TimeBlock> tbVector; 
-
-    for (int i = 0; i <= tbArraySize; i++)
-    {
-        //TimeBlock tb(newTask1, startTime);
-        //tbVector.push_back(tb);
-        startTime += increment;
-    }
-
-    return tbVector; 
-
-}
 
 /**********************************************************
  *
@@ -70,7 +51,7 @@ vector<TimeBlock> createTimeBlocks(Task* task)
  * POST-CONDITIONS
  *     This function writes the tasks to a file. Returns nothing
  ***********************************************************/
-void Calendar::writeToFile()
+void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
 {
     string serialized = "[";
     std::map<string, Task*>::iterator it = taskMap.begin();
@@ -90,6 +71,11 @@ void Calendar::writeToFile()
     outfile.close();
 }
 
+//bool addTaskToValid(Task* task,     //Task that the TimeBlock points to
+//                    date date,      //Date that the task happens
+//                    std::map<string, std::map<string, vector<TimeBlock>>>
+//                    &TimeBlockMap); //Map that stores all the times of the tasks
+//int convertTypeToInt(string type);
 /**********************************************************
  *
  * Method readFromFile(): Class Calendar
@@ -104,9 +90,13 @@ void Calendar::writeToFile()
  *     This function populates the task list. Returns nothing
  ***********************************************************/
 // Create map<year<date<timeblocks>>> from JSON file
-void Calendar::readFromFile()
+std::map<string, Task*> Calendar::readFromFile(std::map<string,
+                                               std::map<string,
+                                               vector<TimeBlock>>>
+                                               &TBMap, string fname)
 {
-    ifstream infile(dataName);
+    ifstream infile(fname);
+    std::map<string, Task*> taskMap;
 
     json info = json::parse(infile);
 
@@ -153,7 +143,7 @@ void Calendar::readFromFile()
                 d <= r->getEndDate(); d = d + date_duration(frequency))
             {
                 //cout << "Date is: " << d << endl;
-                addTaskToValid(d);
+                addTaskToTimeBlockMap(r, d, TBMap);
             }
 
         }
@@ -166,18 +156,19 @@ void Calendar::readFromFile()
                                                  static_cast<Task::TaskTypes>
                                                  (convertTypeToInt(type)));
             taskMap.insert(std::pair<string, Task*>(name, t));
-            addTaskToValid(t->getStartDate());
+            addTaskToTimeBlockMap(t, t->getStartDate(), TBMap);
         }
     }
     cout << "Printing valid map" << endl;
-    printValid();
+    printValid(TBMap);
+    return taskMap;
 }
 
 /**********************************************************
  *
  * Method addTaskToValid(): Class Calendar
  *_________________________________________________________
- * This method populates TimeBlocks in the validMap based on
+ * This method populates TimeBlocks in the TimeBlockMap based on
  * the date it appears
  *_________________________________________________________
  * PRE-CONDITIONS
@@ -187,37 +178,45 @@ void Calendar::readFromFile()
  *     This function populates the validity map. Returns true
  *     if the date is valid. False otherwise
  ***********************************************************/
-bool Calendar::addTaskToValid(date date)
-{
-    string taskYear = boost::lexical_cast<string>(date.year());
-    string taskDay = boost::lexical_cast<string>(date.day_of_year());
+//bool Calendar::addTaskToValid(Task* task,     //Task that the TimeBlock points to
+//                    date date,      //Date that the task happens
+//                    std::map<string, std::map<string, vector<TimeBlock>>>
+//                    &TimeBlockMap)  //Map that stores all the times of the tasks
+//{
+//    string taskYear = boost::lexical_cast<string>(date.year());
+//    string taskDay = boost::lexical_cast<string>(date.day_of_year());
 
-    //If we haven't found a task with this year yet
-    if(validMap.find(taskYear) == validMap.end())
-    {
-        //Inserting a blank map at the year mark
-        validMap.insert(std::pair<string, std::map<string, TimeBlock>>
-                        (taskYear, std::map<string, TimeBlock>()));
-        //Creating an empty array of TimeBlocks at the day of the year
-        validMap.at(taskYear).insert(std::pair<string, TimeBlock>(taskDay,
-                                                                  TimeBlock()));
+//    //If we haven't found a task with this year yet
+//    if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
+//    {
+//        //Inserting a blank map at the year mark
+//        TimeBlockMap.insert(std::pair<string, std::map<string, vector<TimeBlock>>>
+//                        (taskYear, std::map<string, vector<TimeBlock>>()));
+//        //Creating a vector of 96 empty TimeBlocks at the day of the year
+//        TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
+//                                         (taskDay, vector<TimeBlock>(96,
+//                                                   TimeBlock(task, 0))));
 
-    }
-    //If the year is in the map but the day isn't
-    else if(validMap.at(taskYear).find(taskDay) == validMap.at(taskYear).end())
-    {
-        validMap.at(taskYear).insert(std::pair<string, TimeBlock>(taskDay,
-                  TimeBlock()));
-    }
+//    }
+//    //If the year is in the map but the day isn't
+//    else if(TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())
+//    {
+//        TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
+//                                         (taskDay, vector<TimeBlock>
+//                                          (96, TimeBlock(task, 0))));
+//    }
 
-    //Call function to populate TimeBlocks here. Have the function return true
-    //if it can be added. False otherwise
-    ///validMap.at(taskYear).at(taskDay).populate(start, end);
+//    //Call function to populate TimeBlocks here. Have the function return true
+//    //if it can be added. False otherwise
+//    //cout << task->getStartTime() << endl;
+//    ///validMap.at(taskYear).at(taskDay).populate(start, end);
+
+//    printValid(TimeBlockMap);
 
 
-    //Returning false means that the task wasn't added
-    return false;
-}
+//    //Returning false means that the task wasn't added
+//    return false;
+//}
 
 void Calendar::timeBlockDisplay() 
 {
@@ -234,26 +233,26 @@ bool Calendar::timeAvailable(float time)
     return false;
 }
 
-/**********************************************************
- *
- * Method printTasks(): class Calendar
- *_________________________________________________________
- * This function prints all tasks in the calendar
- *_________________________________________________________
- * PRE-CONDITIONS
- *     none
- *
- * POST-CONDITIONS
- *     This function prints all the tasks in the taskMap
- ***********************************************************/
-void Calendar::printTasks()
-{
-    for(std::map<string, Task*>::iterator it = taskMap.begin();
-        it != taskMap.end(); it++)
-    {
-        it->second->display();
-    }
-}
+///**********************************************************
+// *
+// * Method printTasks(): class Calendar
+// *_________________________________________________________
+// * This function prints all tasks in the calendar
+// *_________________________________________________________
+// * PRE-CONDITIONS
+// *     none
+// *
+// * POST-CONDITIONS
+// *     This function prints all the tasks in the taskMap
+// ***********************************************************/
+//void printTasks(std::map<string, Task*> taskMap)
+//{
+//    for(std::map<string, Task*>::iterator it = taskMap.begin();
+//        it != taskMap.end(); it++)
+//    {
+//        it->second->display();
+//    }
+//}
 
 /**********************************************************
  *
@@ -267,23 +266,23 @@ void Calendar::printTasks()
  * POST-CONDITIONS
  *     This function prints the years and days that are in the valid map
  ***********************************************************/
-void Calendar::printValid()
-{
-    for(std::map<string, std::map<string, TimeBlock>>::iterator
-        it = validMap.begin(); it != validMap.end(); it++)
-    {
-        //Printing out the year and the days that tasks happen in that year
-        cout << it->first << ": ";
-        cout << it->second.begin()->first;
-        std::map<string, TimeBlock>::iterator it2;
-        for(std::map<string, TimeBlock>::iterator it2 =
-            std::next(it->second.begin()); it2 != it->second.end(); it2++)
-        {
-            cout << ", " << it2->first;
-        }
-        cout << endl;
-    }
-}
+//void Calendar::printValid(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlockMap)
+//{
+//    for(std::map<string, std::map<string, vector<TimeBlock>>>::iterator
+//        it = TimeBlockMap.begin(); it != TimeBlockMap.end(); it++)
+//    {
+//        //Printing out the year and the days that tasks happen in that year
+//        cout << it->first << ": ";
+//        cout << it->second.begin()->first;
+//        std::map<string, TimeBlock>::iterator it2;
+//        for(std::map<string, vector<TimeBlock>>::iterator it2 =
+//            std::next(it->second.begin()); it2 != it->second.end(); it2++)
+//        {
+//            cout << ", " << it2->first;
+//        }
+//        cout << endl;
+//    }
+//}
 
 /**********************************************************
  *
@@ -298,28 +297,28 @@ void Calendar::printValid()
  * POST-CONDITIONS
  *     This function returns the enum number associated with the task
  ***********************************************************/
-int Calendar::convertTypeToInt(string type)
-{
-    if(type == "Cancellation")
-        return 0;
-    else if(type == "Class")
-        return 1;
-    else if(type == "Study")
-        return 2;
-    else if(type == "Sleep")
-        return 3;
-    else if(type == "Exercise")
-        return 4;
-    else if(type == "Work")
-        return 5;
-    else if(type == "Meal")
-        return 6;
-    else if(type == "Visit")
-        return 7;
-    else if(type == "Shopping")
-        return 8;
-    else if(type == "Appointment")
-        return 9;
-    else
-        return -1;
-}
+//int Calendar::convertTypeToInt(string type)
+//{
+//    if(type == "Cancellation")
+//        return 0;
+//    else if(type == "Class")
+//        return 1;
+//    else if(type == "Study")
+//        return 2;
+//    else if(type == "Sleep")
+//        return 3;
+//    else if(type == "Exercise")
+//        return 4;
+//    else if(type == "Work")
+//        return 5;
+//    else if(type == "Meal")
+//        return 6;
+//    else if(type == "Visit")
+//        return 7;
+//    else if(type == "Shopping")
+//        return 8;
+//    else if(type == "Appointment")
+//        return 9;
+//    else
+//        return -1;
+//}

@@ -46,11 +46,11 @@ public:
     virtual ~Task() {}
 
 protected:
-	std::string name;
-    date startDate;
-	double startTime;
-	double duration;
-	TaskTypes type;
+    std::string name;       //Name of the task
+    date startDate;         //Date the task starts
+    double startTime;       //Time the task starts
+    double duration;        //How long the task lasts
+    TaskTypes type;         //The type of the task
 };
 
 	/******************************

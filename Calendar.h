@@ -3,6 +3,7 @@
 
 #include "includes.h"
 #include "json.hpp"
+#include "helpers.h"
 
 using namespace std;
 using nlohmann::json;
@@ -15,7 +16,7 @@ class Calendar
 public:
 
     Calendar();
-    ~Calendar();
+    //~Calendar();
     
     vector<TimeBlock> createTimeBlocks(Task* task);  //Create vector of timeblocks --option: either return array or directly write to JSON
 
@@ -24,29 +25,37 @@ public:
     /***************
      ** ACCESSORS **
      ***************/
-    void writeToFile();             //Write timeblocks to JSON 
+    void writeToFile(std::map<string, Task*> taskMap,   //Tasks to write
+                     string fname);  //File to write to
 
     void timeBlockDisplay();        //Print timeblocks from JSON
     // Task getTask(string name);       //don't need 
     // bool nameAvailable(Task task);   //dont need, System does this
     bool dateAvailable(string date);    //date to check if available
     bool timeAvailable(float time);    //starting time to check if available
-    void printTasks();
-    void printValid();
-
-private:
-    std::map<string, Task*> taskMap;    //Stores the tasks
-    //Used to check if a task is valid
-    std::map<string, std::map<string, TimeBlock>> validMap;
-    string dataName = "data.json";      //Output file name
-
-    int convertTypeToInt(string type);  //Task type
+    //void printTasks();
+    //void printValid(std::map<string, std::map<string, vector<TimeBlock>>>&);
 
     /**************
      ** MUTATORS **
      **************/
-    void readFromFile();            //Read tasks from JSON
-    bool addTaskToValid(date);      //Date of the task to add to the validation
+    std::map<string, Task*> readFromFile(std::map<string, std::map<string, vector<TimeBlock>>> &TBMap, string fname); //JSON file with data
+
+private:
+    //std::map<string, Task*> taskMap;    //Stores the tasks
+    //Used to check if a task is valid
+
+    //TODO: Change validMap name to TimeBlockMap
+    //std::map<string, std::map<string, TimeBlock>> validMap;
+    string dataName = "data.json";      //Output file name
+
+    //int convertTypeToInt(string type);  //Task type
+
+    /**************
+     ** MUTATORS **
+     **************/
+
+    //bool addTaskToValid(Task*, date, std::map<string, std::map<string, vector<TimeBlock>>>&);      //Date of the task to add to the validation
                                     //map. Rejected if invalid
 };
 
