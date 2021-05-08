@@ -25,6 +25,12 @@ public:
 	// Overloaded Constructor
 	Task(const std::string& newName, const std::string& newStartDate,	//name, startDate, startTime, duration, type
 		double newStartTime, double newDuration, TaskTypes newType);
+	
+	// Copy constructor
+	Task(const Task& otherTask);
+	
+	// Overloaded assignment
+	Task& operator=(const Task& otherTask);
 
 	/***************
 	 ** ACCESSORS **
@@ -93,6 +99,32 @@ protected:
 	*		TaskTypes newType - Type of task
 	*   Return: none
 	***************************************************************/
+
+	/**********************************************************
+	*
+	* Constructor Task(const Task& otherTask): Class Task
+	*_________________________________________________________
+	* This method is the copy constructor for the Task class
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will construct a Task class
+	***********************************************************/
+
+	/**********************************************************
+	*
+	* Overloaded Assignment operator=(const Task& otherTask): Class Task
+	*_________________________________________________________
+	* This method assigns an instance of Task to another
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will assign the right hand variable to a copy of the left
+	***********************************************************/
 
 	/***************
 	** ACCESSORS **
