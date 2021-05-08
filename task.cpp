@@ -69,7 +69,7 @@ Task::Task(const std::string& newName, const std::string& newStartDate,
 	double newStartTime, double newDuration, TaskTypes newType)
 {
 	name = newName;
-    startDate = date_from_iso_string(newStartDate);
+    	startDate = date_from_iso_string(newStartDate);
 	startTime = newStartTime;
 	duration = newDuration;
 	type = newType;
@@ -96,6 +96,8 @@ Task& Task::operator=(const Task& otherTask)
 	startTime = otherTask.startTime;
 	duration = otherTask.duration;
 	type = otherTask.type;
+	
+	return *this;
 }
 
 /**********************************************************
