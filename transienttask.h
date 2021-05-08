@@ -9,14 +9,17 @@ class TransientTask : public Task
 {
 public:
 	TransientTask();
+	TransientTask(const TransientTask& otherTask);
 	TransientTask(const std::string& newName, const std::string& newStartDate,		//name, startDate, startTime, duration, type
 		double newStartTime, double newDuration, TaskTypes newType)
 		: Task(newName, newStartDate, newStartTime, newDuration, newType) {}
+		
+	TransientTask& operator=(const TransientTask& otherTask);
 
-    void setType(int choice) override;		// set type of task
-    void display() const override;			// print protected member variables
+    	void setType(int choice) override;							// set type of task
+    	void display() const override;								// print protected member variables
 
-    ~TransientTask() override {}
+    	~TransientTask() override {}
 };
 
 	/******************************
@@ -37,19 +40,32 @@ public:
 	*   Return: none
 	***************************************************************/
 
-    /***************
-    ** ACCESSORS **
-    ***************/
+	/**********************************************************
+	*
+	* Constructor TransientTask(const TransientTask& otherTask): Class TransientTask
+	*_________________________________________________________
+	* This method is the copy constructor for the TransientTask class
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will construct a TransientTask class
+	***********************************************************/
 
-    /*******************************************************************
-    * virtual string serialize() const;
-    *
-    *   Virtual Method; serializes information into a json string
-    *------------------------------------------------------------------
-    *   Parameter: None
-    *------------------------------------------------------------------
-    *   Return: string-serialized task information
-    *******************************************************************/
+	/***************
+	** ACCESSORS **
+	***************/
+
+	/*******************************************************************
+	* virtual string serialize() const;
+	*
+	*   Virtual Method; serializes information into a json string
+	*------------------------------------------------------------------
+	*   Parameter: None
+	*------------------------------------------------------------------
+	*   Return: string-serialized task information
+	*******************************************************************/
 
 	/**************
 	** MUTATORS **

@@ -10,10 +10,12 @@ public:
 	AntiTask(const std::string& newName, const std::string& newStartDate,					// name, startDate, startTime, duration, type = Cancellation
 		double newStartTime, double newDuration)
 		: Task(newName, newStartDate, newStartTime, newDuration, Task::Cancellation) {}
+	AntiTask(const AntiTask& otherTask);
+	AntiTask& operator=(const AntiTask& otherTask);
 
-    void setType(int choice) override;
-    void display() const override;			// print protected member variables
-    ~AntiTask() override;
+    	void setType(int choice) override;
+    	void display() const override;			// print protected member variables
+    	~AntiTask() override;
 };
 
 	/******************************
@@ -33,6 +35,32 @@ public:
 	*		TaskTypes newType - Type of task (Always set to Cancellation)
 	*   Return: none
 	***************************************************************/
+
+	/**********************************************************
+	*
+	* Constructor AntiTask(const AntiTask& otherTask): Class AntiTask
+	*_________________________________________________________
+	* This method is the copy constructor for the AntiTask class
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will construct a AntiTask class
+	***********************************************************/
+
+	/**********************************************************
+	*
+	* Overloaded Assignment operator=(const AntiTask& otherTask): Class AntiTask
+	*_________________________________________________________
+	* This method assigns an instance of AntiTask to another
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will assign the right hand variable to a copy of the left
+	***********************************************************/
 
 	/**************
 	** MUTATORS **

@@ -23,6 +23,54 @@ RecurrentTask::RecurrentTask()
 
 /**********************************************************
  *
+ * Constructor RecurrentTask(const RecurrentTask& otherTask: Class RecurrentTask
+ *_________________________________________________________
+ * This method is the copy constructor for the RecurrentTask class
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     otherTask: The task to copy from
+ *
+ * POST-CONDITIONS
+ *     This function will construct a RecurrentTask class
+ ***********************************************************/
+
+RecurrentTask::RecurrentTask(const RecurrentTask& otherTask)
+	: Task(otherTask.name, otherTask.startDate, otherTask.startTime,
+		otherTask.duration, otherTask.type)
+{
+	endDate = otherTask.endDate;
+	freq = otherTask.freq;
+}
+
+/**********************************************************
+ *
+ * Overloaded Assignment operator=(const RecurrentTask& otherTask): Class RecurrentTask
+ *_________________________________________________________
+ * This method assigns an instance of RecurrentTask to another
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     otherTask: The task to copy from
+ *
+ * POST-CONDITIONS
+ *     This function will assign the right hand variable to a copy of the left
+ ***********************************************************/
+
+RecurrentTask& RecurrentTask::operator=(const RecurrentTask& otherTask)
+{
+	this->~RecurrentTask();
+	endDate = otherTask.endDate;
+	freq = otherTask.freq;
+	name = otherTask.name;
+	startDate = otherTask.startDate;
+	startTime = otherTask.startTime;
+	duration = otherTask.duration;
+	type = otherTask.type;
+	
+	return *this;
+}
+
+/**********************************************************
+ *
  * Method setType(int choice): Class RecurrentTask
  *_________________________________________________________
  * This method sets the type of RecurrentTask

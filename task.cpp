@@ -19,10 +19,32 @@ using namespace std;
 Task::Task()
 {
 	name = "N/A";
-    startDate = date();
+    	startDate = date();
 	startTime = 00.00;
 	duration = 00.00;
 	type = Class;
+}
+
+/**********************************************************
+ *
+ * Constructor Task(const Task& otherTask): Class Task
+ *_________________________________________________________
+ * This method is the copy constructor for the Task class
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     otherTask: The task to copy from
+ *
+ * POST-CONDITIONS
+ *     This function will construct a Task class
+ ***********************************************************/
+
+Task::Task(const Task& otherTask)
+{
+	name = otherTask.name;
+	startDate = otherTask.startDate;
+	startTime = otherTask.startTime;
+	duration = otherTask.duration;
+	type = otherTask.type;
 }
 
 /**********************************************************
@@ -47,10 +69,35 @@ Task::Task(const std::string& newName, const std::string& newStartDate,
 	double newStartTime, double newDuration, TaskTypes newType)
 {
 	name = newName;
-    startDate = date_from_iso_string(newStartDate);
+    	startDate = date_from_iso_string(newStartDate);
 	startTime = newStartTime;
 	duration = newDuration;
 	type = newType;
+}
+
+/**********************************************************
+ *
+ * Overloaded Assignment operator=(const Task& otherTask): Class Task
+ *_________________________________________________________
+ * This method assigns an instance of Task to another
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     otherTask: The task to copy from
+ *
+ * POST-CONDITIONS
+ *     This function will assign the right hand variable to a copy of the left
+ ***********************************************************/
+
+Task& Task::operator=(const Task& otherTask)
+{
+	this->~Task();
+	name = otherTask.name;
+	startDate = otherTask.startDate;
+	startTime = otherTask.startTime;
+	duration = otherTask.duration;
+	type = otherTask.type;
+	
+	return *this;
 }
 
 /**********************************************************
