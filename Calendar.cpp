@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "boost/date_time.hpp"
 #include "calendar.h"
+#include "helpers.h"
 
 using namespace std;
 
@@ -43,6 +44,117 @@ void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
     outfile.close();
 }
 
+/**********************************************************
+ *
+ * Method displayCalendar(): Class Calendar
+ *_________________________________________________________
+ * This method displays the calendar, allowing the user to
+ * see his/her tasks laid out
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     date(string) - startDate of the time period user wants to see
+ *     rangeOfDays(int) - rangeOfDays of time user wants to see, in days
+ *
+ * POST-CONDITIONS
+ *     This function returns nothing
+ ***********************************************************/
+void displayCalendar(string date, int rangeOfDays, std::map<string,
+                                                std::map<string,
+                                                 vector<TimeBlock>>>
+                                                 &TBMap)
+{
+  try 
+  {
+    boost::gregorian::date d = boost::gregorian::date_from_iso_string(date);  // Create date from '20210507' format 
+    string taskYear = boost::lexical_cast<string>(d.year());                  // Store year from date in a string ('2021')
+    string taskMon = boost::lexical_cast<string>(d.month());                  // Store month from date in a string ('5')
+    string taskDay = boost::lexical_cast<string>(d.day_of_year());            // Store day number out of whole year ('20210507' -> '126')
+    string displayDate = boost::lexical_cast<string>(d.day());                // Store day from date ('20210507' -> '7')
+    string dayOfWeek = boost::lexical_cast<string>(d.day_of_week());          // Store day of the week ('20210507' -> 'Friday')
+
+    boost::gregorian::date_period dp(d, days(rangeOfDays + 1));                  // The rangeOfDays of dates we're displaying
+    
+    // Find task in timeBlockMap from date 
+    if(rangeOfDays != 0)
+    {
+      string startDate = boost::lexical_cast<string>(dp.begin());             // Beginning date from rangeOfDays ('2021-05-07' format)
+      string endDate = boost::lexical_cast<string>(dp.last());                // End date from rangeOfDays ('2021-05-14' format)
+
+      // Use the calendar to get the last day of the month
+      boost::gregorian::date d1 = date_from_iso_string(date);                 // Create date from '20210507' format
+      boost::gregorian::date d2 = from_simple_string(endDate);                // Create date from '2021-05-14' format
+      string d1Start = boost::lexical_cast<string>(d1.day_of_week());         // Day of the week ('20210507' -> 'Friday')
+      string d2End = boost::lexical_cast<string>(d2.day_of_week());           // Day of the week ('20210507' -> 'Friday')
+
+      if(rangeOfDays == 1) 
+      {
+        string startDate = boost::lexical_cast<string>(dp.begin());
+        cout << "----------------------------------------------------------------------------" << endl;
+        cout << setw(30) << dayOfWeek << ", " << startDate << endl;
+        cout << "----------------------------------------------------------------------------" << endl;
+      }
+      else
+      {
+        cout << "----------------------------------------------------------------------------" << endl;
+        cout << setw(23) << d1Start << ", " << startDate << " to " << d2End << ", " << endDate << endl;
+        cout << "----------------------------------------------------------------------------" << endl;
+      }
+      // using namespace boost::gregorian;
+     
+      // Construct an iterator starting with the start date
+      boost::gregorian::day_iterator ditr(d1);
+      // Loop through the days and print each one
+      for (; ditr <= d2; ++ditr) 
+      {
+        cout << ditr->day_of_week() << ": " << to_simple_string(*ditr) << endl;
+        cout << "--------------------" << endl;
+        if(rangeOfDays == 1)
+        {
+          ++ditr;                                                             // To make sure only one date is printed
+        }
+        //Year is in time block map
+        if(TBMap.find(taskYear) != TBMap.end())
+        {
+          // Date is in Year in time block map
+          if(TBMap.at(taskYear).find(taskDay) != TBMap.at(taskYear).end())
+          {
+            // Read the tasks from the time blocks for the whole day (24 * rangeOfDays)
+            for(float i = 0; i < (24 * rangeOfDays); i += .25)
+            {
+              // Checking to see if any time blocks are occupied with a task ===This is what im unsure about=== 
+              if(TBMap.at(taskYear).at(taskDay).at
+                (i).get_task() != nullptr
+                && TBMap.at(taskYear).at(taskDay).
+                at((i).get_task())->getType()
+                != "Cancellation")
+              { 
+                // Print Task to Console
+                string taskName = TBMap.at(taskYear).at(taskDay).at(i).get_task()->getName();
+                string taskStartTime = TBMap.at(taskYear).at(taskDay).at(i).get_task()->getStartTime();
+                double taskDuration = TBMap.at(taskYear).at(taskDay).at(i).get_task()->getDuration());
+                cout << taskStartTime << " " << taskName << endl; 
+                i += taskDuration;
+              } 
+            }
+          }
+          else
+          {
+            cout << "No tasks scheduled." << endl;
+          }
+        }
+        else 
+        {
+          cout << "No tasks scheduled." << endl;
+        }
+        cout << "--------------------" << endl;
+      }
+    } 
+  }
+  catch(exception& e) 
+  {
+    cout << "Error bad date, check your entry: \n" << "  Details: " << e.what() << endl;
+  }  
+}
 
 /**********************************************************
  *
