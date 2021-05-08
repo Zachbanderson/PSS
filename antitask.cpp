@@ -62,6 +62,8 @@ AntiTask& AntiTask::operator=(const AntiTask& otherTask)
 	startTime = otherTask.startTime;
 	duration = otherTask.duration;
 	type = otherTask.type;
+	
+	return *this;
 }
 
 /**********************************************************
