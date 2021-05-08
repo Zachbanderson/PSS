@@ -65,6 +65,8 @@ RecurrentTask& RecurrentTask::operator=(const RecurrentTask& otherTask)
 	startTime = otherTask.startTime;
 	duration = otherTask.duration;
 	type = otherTask.type;
+	
+	return *this;
 }
 
 /**********************************************************
