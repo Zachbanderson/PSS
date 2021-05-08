@@ -103,9 +103,9 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
         for(float i = 0; i < task->getDuration(); i += .25)
         {
             if(TimeBlockMap.at(taskYear).at(taskDay).at
-                    (((task->getStartTime() + i) / .25)).get_task() != nullptr
+                    (((task->getStartTime() + i) / .25)).getTask() != nullptr
                     && TimeBlockMap.at(taskYear).at(taskDay).
-                    at(((task->getStartTime() + i) / .25)).get_task()->getType()
+                    at(((task->getStartTime() + i) / .25)).getTask()->getType()
                     != "Cancellation")
             {
                 return false;
@@ -116,7 +116,7 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
             //This line accesses the TimeBlock at the correct place. Doesn't
             //need to search through the vector
             TimeBlockMap.at(taskYear).at(taskDay).at
-                    (((task->getStartTime() + i) / .25)).set_task(task);
+                    (((task->getStartTime() + i) / .25)).setTask(task);
         }
 
     }
@@ -192,4 +192,30 @@ void printValid(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlock
         }
         cout << endl;
     }
+}
+
+/**********************************************************
+ *
+ * Method indexFinder(): Helper function
+ *_________________________________________________________
+ * This function returns the index of timeBlock in the timeBlockMap
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *
+ *
+ * POST-CONDITIONS
+ *     This function returns the index number of timeBlock
+ ***********************************************************/
+int indexFinder(double startTime)
+{
+  double time = 0.0;
+  int index = 0;
+  for(int i = 0; i < 96; i++)
+  {
+    if (startTime == time + i * 0.25 )
+    {
+      return i;
+    }
+  }
+  return -1;
 }

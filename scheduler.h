@@ -34,6 +34,10 @@ private:
     std::map<string, Task*> taskMap;
     std::map<string, std::map<string, vector<TimeBlock>>> TimeBlockMap;
 
+
+    bool createNewTask(string name, string startDate, double startTime,
+        double duration, int type, string endDate = "", int freq = 0 );
+
     /***************
      ** ACCESSORS **
      ***************/
@@ -41,7 +45,7 @@ private:
     bool validateRTask(RecurrentTask* rtask);   //Task to validate
     bool nameValid(string name);    //Name of the task. Checks if name is in
                                     //taskMap
-    bool timeValid(date d);         //Date to validate
+    bool timeValid(string sDate, double sTime, double duration); //Date to validate
 
 
     void printTimeBlockMap();

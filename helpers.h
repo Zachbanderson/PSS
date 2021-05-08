@@ -15,5 +15,6 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
 int convertTypeToInt(string type);
 void printValid(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlockMap);
 
+int indexFinder(double startTime);
 
 #endif // HELPERS_H

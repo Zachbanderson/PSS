@@ -19,7 +19,7 @@ using namespace std;
 Task::Task()
 {
 	name = "N/A";
-    startDate = date();
+  startDate = date();
 	startTime = 00.00;
 	duration = 00.00;
 	type = Class;
@@ -47,7 +47,7 @@ Task::Task(const std::string& newName, const std::string& newStartDate,
 	double newStartTime, double newDuration, TaskTypes newType)
 {
 	name = newName;
-    startDate = date_from_iso_string(newStartDate);
+  startDate = date_from_iso_string(newStartDate);
 	startTime = newStartTime;
 	duration = newDuration;
 	type = newType;
@@ -186,7 +186,7 @@ void Task::setStartTime(double newStartTime)
  * This method modifies the duration of Task
  *_________________________________________________________
  * PRE-CONDITIONS
- *     newDuration: the new duration 
+ *     newDuration: the new duration
  *
  * POST-CONDITIONS
  *     Nothing

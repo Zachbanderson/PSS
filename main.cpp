@@ -295,14 +295,14 @@ void printTasks(std::map<string, Task*> taskMap)
 
 void printTask(TimeBlock* tb_array, int tb_array_size)
 {
-    cout << "Task Name: " << tb_array[0].get_task()->getName() << endl;
-    //cout << "Type of the task is: " << tb_array[0].get_task()->get_type() << endl;
+    cout << "Task Name: " << tb_array[0].getTask()->getName() << endl;
+    //cout << "Type of the task is: " << tb_array[0].getTask()->get_type() << endl;
     cout << "This task has: " << tb_array_size
         << " time blocks starting from ";
 
     for (int i = 0; i < tb_array_size; i++)
     {
-        cout << tb_array[i].get_tb_startTime() << " ";
+        cout << tb_array[i].getStartTime() << " ";
 
     }
     cout << endl;
@@ -458,7 +458,7 @@ int main()
         //
         //	for (int j = 0; j < tb_array_size; j++)
         //	{
-        //		cout << tb_date_pair.second[j].get_tb_startTime() << " ";
+        //		cout << tb_date_pair.second[j].getStartTime() << " ";
         //	}
         //	cout << endl;
         //}

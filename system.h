@@ -20,6 +20,7 @@ public:
 
     void displayCalendar();
 
+
 private:
     /***************
      ** ACCESSORS **

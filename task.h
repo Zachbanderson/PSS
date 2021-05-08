@@ -30,25 +30,25 @@ public:
 	 ** ACCESSORS **
 	 ***************/
 	std::string getName() const;
-    	date getStartDate() const;
+  date getStartDate() const;
 	double getStartTime() const;
 	double getDuration() const;
 	std::string getType() const;
-    	virtual void display() const;							// print protected member variables
-    	virtual std::string serialize() const;
+  virtual void display() const;							// print protected member variables
+  virtual std::string serialize() const;
 
 	/**************
 	 ** MUTATORS **
 	 **************/
 	void setName(const std::string& newName);				// set name of task
-    	void setStartDate(const date newStartDate);				// set start date of task
+  void setStartDate(const date newStartDate);				// set start date of task
 	void setStartTime(double newStartTime);					// set start time of task
-    	void setDuration(double newDuration);					// set duration of task
+  void setDuration(double newDuration);					// set duration of task
 	virtual void setType(int choice) = 0;					// set type of task
 
 
-    	virtual ~Task() {}
-	
+  virtual ~Task() {}
+
 	// To be moved to a different class (maybe)
 	/**********************************************************
 	*
@@ -85,7 +85,7 @@ protected:
 	* Task((const std::string& newName, const std::string& newStartDate,
 	double newStartTime, double newDuration, TaskTypes newType);
 	*   Constructor; Initialize class attributes
-	*   Parameters: 
+	*   Parameters:
 	*		string newName - Name of the Task
 	*		string newStartDate - Start Date of the Task
 	*		double newStartTime - Start time of the Task
@@ -195,7 +195,7 @@ protected:
 	/*******************************************************************
 	* void setStartTime(double newStartTime);
 	*
-	*   Method; This method sets the start time 
+	*   Method; This method sets the start time
 	*------------------------------------------------------------------
 	*   Parameter: newStartTime(double) - The new start time
 	*------------------------------------------------------------------
