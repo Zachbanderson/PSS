@@ -116,7 +116,7 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
          {
            if(timeBlockMap[taskYear][Date][i].getTask() != nullptr)
            {
-             timeBlockMap[taskYear][Date][i].setTask(&task);
+             timeBlockMap[taskYear][Date][i].setTask(nullptr);
 
            }
          }
