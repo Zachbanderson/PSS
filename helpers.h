@@ -14,7 +14,9 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
                     &TimeBlockMap);  //Map that stores all the times of the tasks
 int convertTypeToInt(string type);
 void printValid(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlockMap);
-
-int indexFinder(double startTime);
+bool validDateFormat(string userDate);
+bool validDurationFormat(string userDuration);
+float convertDuration(string userDuration);
+bool validTimeFormat(string userTime);
 
 #endif // HELPERS_H

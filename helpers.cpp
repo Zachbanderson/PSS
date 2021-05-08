@@ -103,9 +103,9 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
         for(float i = 0; i < task->getDuration(); i += .25)
         {
             if(TimeBlockMap.at(taskYear).at(taskDay).at
-                    (((task->getStartTime() + i) / .25)).getTask() != nullptr
+                    (((task->getStartTime() + i) / .25)).get_task() != nullptr
                     && TimeBlockMap.at(taskYear).at(taskDay).
-                    at(((task->getStartTime() + i) / .25)).getTask()->getType()
+                    at(((task->getStartTime() + i) / .25)).get_task()->getType()
                     != "Cancellation")
             {
                 return false;
@@ -116,7 +116,7 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
             //This line accesses the TimeBlock at the correct place. Doesn't
             //need to search through the vector
             TimeBlockMap.at(taskYear).at(taskDay).at
-                    (((task->getStartTime() + i) / .25)).setTask(task);
+                    (((task->getStartTime() + i) / .25)).set_task(task);
         }
 
     }
@@ -196,26 +196,195 @@ void printValid(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlock
 
 /**********************************************************
  *
- * Method indexFinder(): Helper function
+ * Method validDurationFormat(): Class Menu
  *_________________________________________________________
- * This function returns the index of timeBlock in the timeBlockMap
+ * This method checks if the duration is an integer and is a multiple of 15
  *_________________________________________________________
  * PRE-CONDITIONS
- *
- *
+ *     userDuration(string) - The string version of duration
  * POST-CONDITIONS
- *     This function returns the index number of timeBlock
+ *     This returns true if the duration is valid
  ***********************************************************/
-int indexFinder(double startTime)
-{
-  double time = 0.0;
-  int index = 0;
-  for(int i = 0; i < 96; i++)
-  {
-    if (startTime == time + i * 0.25 )
-    {
-      return i;
+bool validDurationFormat(string userDuration) { //finished
+    int duration;
+    for (int i = 0; i < userDuration.length(); i++) {
+        if (isdigit(userDuration[i]) == false) {
+            return false;
+        }
     }
-  }
-  return -1;
+    duration = stoi(userDuration);
+    if (duration % 15 == 0 && duration > 0 && duration / 15 <= 96) {
+        return true;
+    }
+    cout << "Duration must be a multiple of 15.\n";
+    return false;
+}
+
+/**********************************************************
+ *
+ * Method validDateFormat(): Helper function for Menu
+ *_________________________________________________________
+ * This method checks if the date is in a valid format.
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     userDate(string) - The date in iso format
+ * POST-CONDITIONS
+ *     This returns true if the date is in a valid format.
+ ***********************************************************/
+bool validDateFormat(string userDate) {
+    if (userDate.length() != 8) {
+        cout << "Date must be in the format YYYYMMDD.\n";
+        return false;
+    }
+
+    string strYear = "";
+    string strMonth = "";
+    string strDay = "";
+
+    //Extract y, m, d iteratively
+    for (int i = 0; i < 4; i++) {
+        if (isdigit(userDate[i]) == false) {
+            cout << "Non digit in year.\n";
+            return false;
+        }
+        else {
+            strYear += userDate[i];
+        }
+    }
+    for (int i = 4; i < 6; i++) {
+        if (isdigit(userDate[i]) == false) {
+            cout << "Non digit in month.\n";
+            return false;
+        }
+        else {
+            strMonth += userDate[i];
+        }
+    }
+    for (int i = 6; i < 8; i++) {
+        if (isdigit(userDate[i]) == false) {
+            cout << "Non digit in day.\n";
+            return false;
+        }
+        else {
+            strDay += userDate[i];
+        }
+    }
+
+    //Convert to integers
+    int year = stoi(strYear);
+    int month = stoi(strMonth);
+    int day = stoi(strDay);
+
+    //Check that month and day are within bounds
+    if (month >= 1 && month <= 12 && day >= 1) {
+        switch (month) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            if (day <= 31) {
+                return true;
+            }
+            else {
+                cout << "Too many days for month " << month << endl;
+            }
+            break;
+        case 2:
+            if (day <= 28) {
+                return true;
+            }
+            else {
+                cout << "Too many days for month " << month << endl;
+            }
+            break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            if (day <= 30) {
+                return true;
+            }
+            else {
+                cout << "Too many days for month " << month << endl;
+            }
+            break;
+        }
+    }
+    else {
+        cout << "Month must be 01-12 and day must be >= 1.\n";
+    }
+    cout << "Date must be in the format YYYYMMDD.\n";
+    return false;
+}
+
+/**********************************************************
+ *
+ * Method convertDuration(): Class Menu
+ *_________________________________________________________
+ * This method converts a valid duration into a float. I.e 15 = 0.25
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     Valid duration format
+ * POST-CONDITIONS
+ *     This returns the duration represent as a float
+ ***********************************************************/
+float convertDuration(string userDuration) {
+    float newDuration;
+    float oldDuration = stof(userDuration);
+
+    newDuration = oldDuration / 60;
+    return newDuration;
+
+}
+
+/**********************************************************
+ *
+ * Method validTimeFormat(): Class Menu
+ *_________________________________________________________
+ * This method checks if the time is in a valid format.
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     none
+ * POST-CONDITIONS
+ *     This returns true if the time is in a valid format.
+ ***********************************************************/
+bool validTimeFormat(string userTime) {
+    string strHour = "";
+    string strMinute = "";
+    //int minute = -1;
+    int minute = -1;
+    int hour = 0;
+    if (userTime.length() == 7) {
+        if (isdigit(userTime[0]) && isdigit(userTime[2]) && isdigit(userTime[3])) {
+            strHour += userTime[0];
+            strMinute += userTime[2];
+            strMinute += userTime[3];
+            minute = stoi(strMinute);
+            hour = stoi(strHour);
+            //return true;
+            if (hour > 0 && hour < 10 && minute > -1 && minute < 60) {
+
+                if (userTime[5] == 'p' || userTime[5] == 'P' || userTime[5] == 'a' || userTime[5] == 'A') {
+                    return true;
+                }
+            }
+        }
+        else if (userTime.length() == 8) {
+            if (isdigit(userTime[0]) && isdigit(userTime[1]) && isdigit(userTime[3]) && isdigit(userTime[4])) {
+                strHour += userTime[0];
+                strHour + userTime[1];
+                strMinute += userTime[3];
+                strMinute += userTime[4];
+                if (hour > 0 && hour < 10 && minute > -1 && minute < 60) {
+                    if (userTime[5] == 'p' || userTime[5] == 'P' || userTime[5] == 'a' || userTime[5] == 'A') {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
