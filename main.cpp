@@ -323,6 +323,20 @@ int main()
 
         Scheduler scheduler(taskMap, map);
 
+        TransientTask newTask("Get drunk", "20210923", 21.00, 2,
+                              TransientTask::TaskTypes(9));
+        if(scheduler.addTTask(newTask))
+        {
+            cout << "We added the task" << endl;
+        }
+        else
+        {
+            cout << "Conflict" << endl;
+        }
+        taskMap = scheduler.getTaskMap();
+
+        calendar.writeToFile(taskMap, "stored.json");
+
         return 0;
     }
     {

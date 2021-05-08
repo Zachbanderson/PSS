@@ -23,18 +23,24 @@ public:
 		freq = newFreq;
 	}
 
-	// Accessors
+    /***************
+    ** ACCESSORS **
+    ***************/
     date getEndDate() const;
 	int getFreq() const;									// returns frequency in integer form
+    void display() const override;                          // print protected private member variablers
+    string serialize() const override;
 
-	// Mutators
+
+    /**************
+    ** MUTATORS **
+    **************/
     void setEndDate(const std::string& newEndDate);			// set endDate of task
 	void setFreq(int newFreq);								// set freq of task (only accepts 1 or 7)
 
 	// Virtual stuff
     void setType(int choice) override;                      // set type of task
-    void display() const override;                          // print protected private member variablers
-    string serialize() const override;
+
 
     ~RecurrentTask() override{}
 

@@ -1,5 +1,17 @@
 #include "helpers.h"
 
+/**********************************************************
+ *
+ * Method createTimeBlocks(): Helper function
+ *_________________________________________________________
+ * This function creates a vector of 96 TimeBlocks
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     task(Task*)-Task to point the TimeBlocks to
+ *
+ * POST-CONDITIONS
+ *     This function returns a vector of 96 TimeBlocks
+ ***********************************************************/
 vector<TimeBlock> createTimeBlocks(Task *task)
 {
     //Check type of task
@@ -24,7 +36,7 @@ vector<TimeBlock> createTimeBlocks(Task *task)
         }
         else
         {
-            TimeBlock tb(nullptr, taskStartTime);
+            TimeBlock tb(nullptr, timeBlockStartTime);
             tbVector.push_back(tb);
             timeBlockStartTime += increment;
         }
@@ -48,84 +60,69 @@ vector<TimeBlock> createTimeBlocks(Task *task)
  *     This function populates the validity map. Returns true
  *     if the date is valid. False otherwise
  ***********************************************************/
+//Reformat this later to not return true or false. No validation should be done here
 bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
                     date date,      //Date that the task happens
                     std::map<string, std::map<string, vector<TimeBlock>>>
                     &TimeBlockMap)  //Map that stores all the times of the tasks
 {
-//    string taskYear = boost::lexical_cast<string>(date.year());
-//    string taskDay = boost::lexical_cast<string>(date.day_of_year());
-
-//    //If we haven't found a task with this year yet
-//    if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
-//    {
-//        //Inserting a blank map at the year mark
-//        TimeBlockMap.insert(std::pair<string, std::map<string, vector<TimeBlock>>>
-//                        (taskYear, std::map<string, vector<TimeBlock>>()));
-//        //Creating a vector of 96 empty TimeBlocks at the day of the year
-//        TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
-//                                         (taskDay, vector<TimeBlock>(96,
-//                                                   TimeBlock(task, 0))));
-
-//    }
-//    //If the year is in the map but the day isn't
-//    else if(TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())
-//    {
-//        TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
-//                                         (taskDay, vector<TimeBlock>
-//                                          (96, TimeBlock(task, 0))));
-//    }
-
-//    //Call function to populate TimeBlocks here. Have the function return true
-//    //if it can be added. False otherwise
-//    //cout << task->getStartTime() << endl;
-//    ///validMap.at(taskYear).at(taskDay).populate(start, end);
-
-//    //printValid(TimeBlockMap);
-
-
-//    //Returning false means that the task wasn't added
-//    return false;
     string taskYear = boost::lexical_cast<string>(date.year());
     string taskDay = boost::lexical_cast<string>(date.day_of_year());
 
     //If we haven't found a task with this year yet
     if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
     {
-        cout << "Haven't found the year" << endl;
+        //cout << "Haven't found the year" << endl;
         //Inserting a blank map at the year mark
         TimeBlockMap.insert(std::pair<string, std::map<string,
                             vector<TimeBlock>>>(taskYear, std::map<string,
                                                 vector<TimeBlock>>()));
-        cout << "Inserted " << taskYear << endl;
-        cout << "Inserted " << taskDay << " at " << taskYear << endl;
+//        cout << "Inserted " << taskYear << endl;
+//        cout << "Inserted " << taskDay << " at " << taskYear << endl;
         //Creating a vector of 96 empty TimeBlocks at the day of the year
         TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
                                          (taskDay, createTimeBlocks(task)));
-        cout << "Added the TimeBlocks" << endl;
+        //cout << "Added the TimeBlocks" << endl;
 
     }
     //If the year is in the map but the day isn't
     else if(TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())
     {
-        cout << "Haven't found the day" << endl;
+        //cout << "Haven't found the day" << endl;
         TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
                                          (taskDay, createTimeBlocks(task)));
-        cout << "Inserted " << taskDay << " at " << taskYear << endl;
-        cout << "Added the TimeBlocks" << endl;
+//        cout << "Inserted " << taskDay << " at " << taskYear << endl;
+//        cout << "Added the TimeBlocks" << endl;
     }
 
-    //Call function to populate TimeBlocks here. Have the function return true
-    //if it can be added. False otherwise
-    //cout << task->getStartTime() << endl;
+    //Trying to add a task on a day where there is already a scheduled task
+    //This is the only time where the function may return false
+    else
+    {
+        //Checking the TimeBlocks to see if any are occupied
+        for(float i = 0; i < task->getDuration(); i += .25)
+        {
+            if(TimeBlockMap.at(taskYear).at(taskDay).at
+                    (((task->getStartTime() + i) / .25)).get_task() != nullptr
+                    && TimeBlockMap.at(taskYear).at(taskDay).
+                    at(((task->getStartTime() + i) / .25)).get_task()->getType()
+                    != "Cancellation")
+            {
+                return false;
+            }
+        }
+        for(float i = 0; i < task->getDuration(); i += .25)
+        {
+            //This line accesses the TimeBlock at the correct place. Doesn't
+            //need to search through the vector
+            TimeBlockMap.at(taskYear).at(taskDay).at
+                    (((task->getStartTime() + i) / .25)).set_task(task);
+        }
 
+    }
 
-
-    ///validMap.at(taskYear).at(taskDay).populate(start, end);
-
-
-    //Returning false means that the task wasn't added
-    return false;
+    //Returning true means that the task was added
+    return true;
 }
 
 /**********************************************************

@@ -9,6 +9,7 @@
 #include "task.h"
 #include "recurrenttask.h"
 #include "transienttask.h"
+#include "antitask.h"
 #include "timeblock.h"
 
 #endif // INCLUDES_H

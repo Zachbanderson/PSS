@@ -11,8 +11,12 @@ class Task
 public:
 	enum TaskTypes
 	{
-		Cancellation = 0, Class = 1, Study = 2, Sleep = 3, Exercise = 4,
-		Work = 5, Meal = 6, Visit = 7, Shopping = 8, Appointment = 9
+        //Antitask
+        Cancellation = 0,
+        //Recurrent
+        Class = 1, Study = 2, Sleep = 3, Exercise = 4, Work = 5, Meal = 6,
+        //Transient
+        Visit = 7, Shopping = 8, Appointment = 9
 	};
 
 	// Default Constructor
