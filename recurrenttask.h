@@ -14,6 +14,7 @@ public:
 	};
 
 	RecurrentTask();
+	RecurrentTask(const RecurrentTask& otherTask);
 	RecurrentTask(const std::string& newName, const std::string& newStartDate,		//name, startDate, startTime, duration, type, endDate, freq
 		double newStartTime, double newDuration, TaskTypes newType,
         const std::string newEndDate, Frequency newFreq)
@@ -22,30 +23,31 @@ public:
         endDate = date_from_iso_string(newEndDate);
 		freq = newFreq;
 	}
+	RecurrentTask& operator=(const RecurrentTask& otherTask);
 
-    /***************
-    ** ACCESSORS **
-    ***************/
-    date getEndDate() const;
-	int getFreq() const;									// returns frequency in integer form
-    void display() const override;                          // print protected private member variablers
-    string serialize() const override;
+	/***************
+	** ACCESSORS **
+	***************/
+	date getEndDate() const;
+	int getFreq() const;									 // returns frequency in integer form
+	void display() const override;                         					 // print protected private member variablers
+	string serialize() const override;
 
 
-    /**************
-    ** MUTATORS **
-    **************/
-    void setEndDate(const std::string& newEndDate);			// set endDate of task
+	/**************
+	** MUTATORS **
+	**************/
+	void setEndDate(const std::string& newEndDate);						// set endDate of task
 	void setFreq(int newFreq);								// set freq of task (only accepts 1 or 7)
 
 	// Virtual stuff
-    void setType(int choice) override;                      // set type of task
+	void setType(int choice) override;                      				// set type of task
 
 
-    ~RecurrentTask() override{}
+	~RecurrentTask() override{}
 
 private:
-    date endDate;
+    	date endDate;
 	Frequency freq;
 };
 
@@ -69,6 +71,32 @@ private:
 	*		Frequency newFreq - frequency of Task
 	*   Return: none
 	***************************************************************/
+
+	/**********************************************************
+	*
+	* Constructor RecurrentTask(const RecurrentTask& otherTask: Class RecurrentTask
+	*_________________________________________________________
+	* This method is the copy constructor for the RecurrentTask class
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will construct a RecurrentTask class
+	***********************************************************/
+
+	/**********************************************************
+	*
+	* Overloaded Assignment operator=(const RecurrentTask& otherTask): Class RecurrentTask
+	*_________________________________________________________
+	* This method assigns an instance of RecurrentTask to another
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     otherTask: The task to copy from
+	*
+	* POST-CONDITIONS
+	*     This function will assign the right hand variable to a copy of the left
+	***********************************************************/
 
 	/***************
 	** ACCESSORS **
