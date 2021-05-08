@@ -1,16 +1,16 @@
 #include "timeblock.h"
 
 
-float TimeBlock::get_tb_startTime()
+double TimeBlock::tbGetStartTime()
 {
-    return tb_startTime;
+    return tbStartTime;
 }
-void TimeBlock::set_task(Task* taskPtr)
+void TimeBlock::setTask(Task* taskPtr)
 {
     task = taskPtr;
 }
 
-Task* TimeBlock::get_task()
+Task* TimeBlock::getTask()
 {
     return task;
 }

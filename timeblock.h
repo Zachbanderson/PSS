@@ -8,17 +8,17 @@ class TimeBlock
 
 public:
     TimeBlock() {}
-    TimeBlock(Task* newTask, float newStartTime) :task(newTask), tb_startTime(newStartTime){}
+    TimeBlock(Task* newTask, float newStartTime) :task(newTask), tbStartTime(newStartTime){}
 
-    float get_tb_startTime();
-    void set_task(Task* taskPtr);
-    Task* get_task();
+    double tbGetStartTime();
+    void setTask(Task* taskPtr);
+    Task* getTask();
 
 
     ~TimeBlock();
 private:
     Task* task;
-    float tb_startTime;
+    float tbStartTime;
     //float increment = 0.25;
 };
 
