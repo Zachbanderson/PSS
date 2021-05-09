@@ -55,14 +55,14 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
         if( intType >= 1 && intType <= 6)
         {
 
-            return addRTask(RecurrentTask(name, startDate,startTime,
+            return addRTask(new RecurrentTask(name, startDate,startTime,
                           duration, Task::TaskTypes(intType), endDate,
                                        RecurrentTask::Frequency(freq)));
         }
         else if(intType >= 7 && intType <=9)
         {
             //3- create task
-            return addTTask(TransientTask(name, startDate,startTime,
+            return addTTask(new TransientTask(name, startDate,startTime,
                                         duration, Task::TaskTypes(intType)));
         }
     }
@@ -140,12 +140,13 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
  *     This function returns nothing. Adds the TransientTask
  *     to TimeBlockMap
  ***********************************************************/
-bool Scheduler::addTTask(TransientTask task)    //Task to add
+bool Scheduler::addTTask(TransientTask* task)    //Task to add
 {
     //Reformat this to call validateTask instead
-    if(addTaskToTimeBlockMap(&task, task.getStartDate(), TimeBlockMap))
+    if(addTaskToTimeBlockMap(task, task->getStartDate(), TimeBlockMap))
     {
-        taskMap.insert(std::pair<string, Task*>(task.getName(), &task));
+        taskMap.insert(std::pair<string, Task*>(task->getName(), task));
+        cout << "Added to TimeBlockMap. Returning true" << endl;
         return true;
     }
     return false;
@@ -164,15 +165,15 @@ bool Scheduler::addTTask(TransientTask task)    //Task to add
  *     This function returns nothing. Adds the recurrent task
  *     to TimeBlockMap
  ***********************************************************/
-bool Scheduler::addRTask(RecurrentTask task)    //Task to add
+bool Scheduler::addRTask(RecurrentTask* task)    //Task to add
 {
-    if(validateRTask(&task))
+    if(validateRTask(task))
     {
-        for(boost::gregorian::date d = task.getStartDate();
-            d <= task.getEndDate(); d = d + date_duration(task.getFreq()))
+        for(boost::gregorian::date d = task->getStartDate();
+            d <= task->getEndDate(); d = d + date_duration(task->getFreq()))
         {
             //cout << "Date is: " << d << endl;
-            addTaskToTimeBlockMap(&task, d, TimeBlockMap);
+            addTaskToTimeBlockMap(task, d, TimeBlockMap);
         }
         return true;
     }

@@ -17,6 +17,8 @@ public:
      ** ACCESSORS **
      ***************/
     std::map<string, Task*> getTaskMap();
+    std::map<string, std::map<string, vector<TimeBlock>>> getTBMap()
+    {return TimeBlockMap;}
 
 
     /**************
@@ -26,8 +28,8 @@ public:
                        double startTime, double duration, int type,
                        string endDate = "", int freq = 0 );
     bool addTask(Task* task);
-    bool addTTask(TransientTask task);
-    bool addRTask(RecurrentTask task);
+    bool addTTask(TransientTask* task);
+    bool addRTask(RecurrentTask* task);
     bool deleteTask(string taskName);
     bool addATask(const std::string& name, const std::string& startDate,
       double startTime, double duration);

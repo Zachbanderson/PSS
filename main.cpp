@@ -62,7 +62,7 @@ int main()
 
         Scheduler scheduler(taskMap, map);
 
-        calendar.displayCalendar("20200415", 7, map);
+        calendar.displayCalendar("20200415", 60, map);
 
 
         if(scheduler.createNewTask("Present this project", "20200511", 17.50,
@@ -75,9 +75,15 @@ int main()
             cout << "Conflict" << endl;
         }
 
+        taskMap = scheduler.getTaskMap();
+        //printTaskMap(taskMap);
+        map = scheduler.getTBMap();
+        //printValid(map);
+
         calendar.displayCalendar("20200415", 60, map);
 
         taskMap = scheduler.getTaskMap();
+        //cout << "Got task map" << endl;
         calendar.writeToFile(taskMap, "stored.json");
 
         return 0;

@@ -31,7 +31,8 @@ void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
     serialized += it->second->serialize();
     for(++it; it != taskMap.end(); it++)
     {
-        serialized += "," + it->second->serialize();
+        cout << "Name of the task is " << it->second->getName() << endl;
+        serialized += "," + it->second->serialize();      
     }
     serialized += "]";
     //cout << serialized << endl;
