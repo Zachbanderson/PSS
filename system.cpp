@@ -175,7 +175,9 @@ void System::displayCreateMenu()
 
                                         //Call sheduler with these values
                                         cout << "Scheduling a task with name: " << taskName << "\nDuration: " << userDuration << "\nStart date: " << userDate << "\nTime: " << userTime << "\nType: " << stoi(taskType) << "\n";
-                                        scheduler->createNewTask(taskName, userDate, convertTimeStrToFloat(userTime), convertDuration(userDuration), stoi(taskType), userDate, 1);
+                                        bool succ;
+                                        succ = scheduler->createNewTask(taskName, userDate, convertTimeStrToFloat(userTime), convertDuration(userDuration), (stoi(taskType) + 6), userDate, 1);
+                                        cout << succ << endl;
                                         exitFlag = true;
 
 
@@ -662,7 +664,7 @@ void System::displayDeleteMenu()
         //Select task name
         validInput = false;
         do {
-            cout << "What is the name of the task you want to edit? (q to exit) ";
+            cout << "What is the name of the task you want to delete? (q to exit) ";
             getline(cin, userInput);
 
             if (userInput.length() == 1 && userInput[0] == 'q') {
