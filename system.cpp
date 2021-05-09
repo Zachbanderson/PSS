@@ -51,7 +51,15 @@ System::~System()
  ***********************************************************/
 void System::displayMainMenu()
 {
-
+    if (scheduler->createNewTask("Present this project", "20200511", 17.50,
+        .50, 9))
+    {
+        cout << "We added the task" << endl;
+    }
+    else
+    {
+        cout << "Conflict" << endl;
+    }
     //cout << scheduler->getTask("Intern Interview", "20200428")->getName() << endl;
     calendar->displayCalendar("20200415", 60, map);
     int userInput;
@@ -258,7 +266,7 @@ void System::displayCreateMenu()
                                         else if (scheduler->nameValid(taskName)) { //scheduler.nameValid(taskName) 
 
                                             cout << "Select the type of task: \n";
-                                            cout << "1 - Class\n2 - Study\n3 - Sleep\n4 - Exercise\n5 - Work\n6 - Meal";
+                                            cout << "1 - Class\n2 - Study\n3 - Sleep\n4 - Exercise\n5 - Work\n6 - Meal\n";
                                             getline(cin, taskType);
                                             if (taskType.length() == 1 && taskType[0] == 'q') {
                                                 exitFlag = true;
@@ -342,17 +350,10 @@ void System::displayCreateMenu()
  ***********************************************************/
 void System::displayEditMenu()
 {
-    if (scheduler->createNewTask("Present this project", "20200511", 17.50,
-        .50, 9))
-    {
-        cout << "We added the task" << endl;
-    }
-    else
-    {
-        cout << "Conflict" << endl;
-    }
+    
     cout << scheduler->timeValid("20200511", 17.50, 0.50) << endl;
     cout << "--Edit Menu--\n";
+    //cout << scheduler->deleteTask("Present this project") << endl;
     /*Task* taskToEdit = scheduler->getTask("Present this project", "20200511");
     cout << scheduler->nameValid("Present this projct") << endl;
     if (scheduler->deleteTask(taskToEdit->getName())) {
@@ -372,9 +373,8 @@ void System::displayEditMenu()
     string taskDate;
     string userInput;
     bool validInput = false;
-    bool exitFlag = false;
 
-    //Select task
+    //Get info for what task the user want's to edit
     do {
         //Select task name
         validInput = false;
@@ -419,9 +419,10 @@ void System::displayEditMenu()
         } while (!validInput);
     } while (!validInput);
 
-    //Get task
+    //Get task from scheduler
     Task* editTask = scheduler->getTask(taskName, taskDate);
 
+    //If the task could not be found exit
     if (editTask == nullptr) {
         cout << "Couldn't retrieve task from scheduler.\n";
         return;
@@ -439,11 +440,12 @@ void System::displayEditMenu()
         cout << "2 - Date\n";
         cout << "3 - Start Time\n";
         cout << "4 - Duration";
-        cout << (editTask->getTypeInt() >= 1 && editTask->getTypeInt() <= 6) ? "\n5 - Frequency\n" : "\n";
+        cout << ((editTask->isRecurrent()) ? "\n5 - Frequency\n" : "\n");
         cout << "0 - Exit\n>";
 
         getline(cin, userInput);
-        if (userInput.length() == 1 && userInput[0] == 'q') {
+        //Check for exit command
+        if (userInput.length() == 1 && (userInput[0] == 'q' || userInput[0] == '0')) {
             return;
         }
 
@@ -459,7 +461,7 @@ void System::displayEditMenu()
         case '0':
             return;
         case '5':
-            if (!(editTask->getTypeInt() >= 1 && editTask->getTypeInt() <= 6))
+            if (!(editTask->isRecurrent()))
             {
                 cout << "Invalid choice, 5 is too large.\n";
                 continue;
@@ -647,110 +649,145 @@ void System::displayDeleteMenu()
     //boolean values used for testing
     bool taskExists = true;
     bool validName = true;
-    bool taskIsReccurring = false;
-    bool taskIsTransient = true;
 
     bool exitFlag = false;
-    string taskName = "";
+
+    string taskName;
     string userDate;
     string userInput;
+    bool validInput = false;
+
+    //Select task
+    do {
+        //Select task name
+        validInput = false;
+        do {
+            cout << "What is the name of the task you want to edit? (q to exit) ";
+            getline(cin, userInput);
+
+            if (userInput.length() == 1 && userInput[0] == 'q') {
+                return;
+            }
+
+            if (!scheduler->nameValid(userInput))//If task exists with that name
+            {
+                taskName = userInput;
+                validInput = true;
+            }
+            else
+            {
+                cout << "No task exists by that name.\n";
+            }
+        } while (!validInput);
+
+        //Select task date
+        validInput = false;
+        do {
+            cout << "Enter the date of the task (YYYYMMDD): ";
+            getline(cin, userInput);
+
+            if (userInput.length() == 1 && userInput[0] == 'q') {
+                return;
+            }
+
+            if (validDateFormat(userInput))//If valid date format
+            {
+                userDate = userInput;
+                validInput = true;
+            }
+            else
+            {
+                cout << "Invalid date format.\n";
+            }
+        } while (!validInput);
+    } while (!validInput);
+
+    //Get task
+    Task* deleteTask = scheduler->getTask(taskName, userDate);
+
+    if (deleteTask == nullptr) {
+        cout << "Couldn't retrieve task from scheduler.\n";
+        return;
+    }
+
+    cout << endl;
+    deleteTask->display();    //Display task information
+
+    
     string userTime;
     string userDuration;
-    do {
-        cout << "Enter the tasks name: ";
-        getline(cin, taskName);
 
-        if (taskName.length() == 1 && taskName[0] == 'q') {
-            exitFlag = true;
+    if (deleteTask->isTransient()) {
+        //delete task
+
+        if (scheduler->deleteTask(taskName)){
+            cout << "Deleting transient with the name " << taskName << "\n";
+        }else{
+            cout << "Could not delete transient task.";
         }
-        else if (validName == true) {
-            if (taskIsTransient) {
-                //delete task
-
-                 if (scheduler->deleteTask(taskName)){
-                   cout << "Deleting transient with the name " << taskName << "\n";
-                 }else{
-                   cout << "Could not delete task.";
-                 }
-                exitFlag = true;
-
+    }
+    else if (deleteTask->isRecurrent()) {
+        cout << "Would you like to delete all of the reccurring tasks or just one instance?\n";
+        cout << "1 - One Instance (create anti-task)\n";
+        cout << "2 - All instances of this task\n";
+        getline(cin, userInput);
+        if (userInput.length() == 1 && userInput[0] == 'q') {
+            return;
+        }
+        else if (userInput[0] == '1') {
+            cout << "Enter the tasks start date: ";
+            getline(cin, userDate);
+            if (userDate.length() == 1 && userDate[0] == 'q') {
+                return;
             }
-            else if (taskIsReccurring) {
-                cout << "Would you like to delete all of the reccurring tasks or just one instance?\n";
-                cout << "1 - One Instance (create anti-task)\n";
-                cout << "2 - All instances of this task\n";
-                getline(cin, userInput);
-                if (userInput.length() == 1 && userInput[0] == 'q') {
-                    exitFlag = true;
+            else if (validDateFormat(userDate)) {
+                cout << "Enter the tasks time: ";
+                getline(cin, userTime);
+                if (userTime.length() == 1 && userTime[0] == 'q') {
+                    return;
                 }
-                else if (userInput == "1") {
-                    cout << "Enter the tasks start date: ";
-                    getline(cin, userDate);
-                    if (userDate.length() == 1 && userDate[0] == 'q') {
-                        exitFlag = true;
+                else if (validTimeFormat(userTime)) {
+
+                    cout << "Enter the tasks duration: ";
+                    getline(cin, userDuration);
+                    if (userDuration.length() == 1 && userDuration[0] == 'q') {
+                        return;
                     }
-                    else if (validDateFormat(userDate)) {
-                        cout << "Enter the tasks time: ";
-                        getline(cin, userTime);
-                        if (userTime.length() == 1 && userTime[0] == 'q') {
-                            exitFlag = true;
-                        }
-                        else if (validTimeFormat(userTime)) {
-
-
-
-                            cout << "Enter the tasks duration: ";
-                            getline(cin, userDuration);
-                            if (userDuration.length() == 1 && userDuration[0] == 'q') {
-                                exitFlag = true;
-                            }
-                            else if (validDurationFormat(userDuration)) {
-
-
-
-
-                                cout << "Creating an anti-task with a duration of" << userDuration << ", time " << userTime << ", and name " << taskName << "\n";
-                                exitFlag = true;
-
-                            }
-                            else {
-                                cout << "Duration is not valid.";
-                            }
-
-
-                        }
-                        else {
-                            cout << "Time is not valid.";
-                        }
+                    else if (validDurationFormat(userDuration)) {
+                        cout << "Creating an anti-task with a duration of" << userDuration << ", time " << userTime << ", and name " << taskName << "\n";
 
                     }
                     else {
-                        cout << "Date is not valid.";
+                        cout << "Duration is not valid.";
                     }
 
-
                 }
-                else if (userInput == "2") {
-
-                    //find task
-                    //delete task;
-                    // if (scheduler.deleteTask(taskName)){
-                    //   cout << "Deleting recuring tasks with the name " << taskName << "\n";
-                    // }else{
-                    //   cout << "Could not delete.";
-                    // }
-                    exitFlag = true;
-
+                else {
+                    cout << "Time is not valid.";
                 }
+
             }
             else {
-                cout << "Error: task is neither recurrent or transient.";
+                cout << "Date is not valid.";
             }
+
+
         }
-        else {
-            cout << "Task does not have a valid name.\n";
+        else if (userInput[0] == '2') {
+
+            //find task
+            //delete task;
+            if (scheduler->deleteTask(taskName)){
+                cout << "Deleting recuring tasks with the name " << taskName << "\n";
+            }else{
+                cout << "Could not delete.";
+            }
+
         }
-    } while (exitFlag == false);
+    }
+    else {
+        cout << "Error: task is neither recurrent or transient.";
+    }
 }
 
 /**********************************************************

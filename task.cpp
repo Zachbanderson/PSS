@@ -333,6 +333,44 @@ int Task::getTypeInt() const
 
 /**********************************************************
  *
+ * Method isTransient() const: Class Task
+ *_________________________________________________________
+ * This method returns true if the task is transient
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     None
+ *
+ * POST-CONDITIONS
+ *     Returns true if transient, false otherwise
+ ***********************************************************/
+bool Task::isTransient() const
+{
+	if (type >= 7 && type <= 9)
+		return true;
+	return false;
+}
+
+/**********************************************************
+ *
+ * Method isRecurrent() const: Class Task
+ *_________________________________________________________
+ * This method returns true if the task is recurrent
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     None
+ *
+ * POST-CONDITIONS
+ *     Returns true if recurrent, false otherwise
+ ***********************************************************/
+bool Task::isRecurrent() const
+{
+	if (type >= 1 && type <= 6)
+		return true;
+	return false;
+}
+
+/**********************************************************
+ *
  * Method display() const: Class Task
  *_________________________________________________________
  * This method displays the information of tTask

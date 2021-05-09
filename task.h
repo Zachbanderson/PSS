@@ -40,6 +40,8 @@ public:
 	double getDuration() const;
 	int Task::getTypeInt() const;
 	std::string getType() const;
+	bool Task::isTransient() const;
+	bool Task::isRecurrent() const;
     virtual void display() const;							// print protected member variables
     virtual std::string serialize() const;
 
