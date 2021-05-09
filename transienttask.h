@@ -9,12 +9,9 @@ class TransientTask : public Task
 {
 public:
 	TransientTask();
-	TransientTask(const TransientTask& otherTask);
 	TransientTask(const std::string& newName, const std::string& newStartDate,		//name, startDate, startTime, duration, type
 		double newStartTime, double newDuration, TaskTypes newType)
 		: Task(newName, newStartDate, newStartTime, newDuration, newType) {}
-		
-	TransientTask& operator=(const TransientTask& otherTask);
 
     	void setType(int choice) override;							// set type of task
     	void display() const override;								// print protected member variables

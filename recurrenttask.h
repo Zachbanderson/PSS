@@ -14,7 +14,6 @@ public:
 	};
 
 	RecurrentTask();
-	RecurrentTask(const RecurrentTask& otherTask);
 	RecurrentTask(const std::string& newName, const std::string& newStartDate,		//name, startDate, startTime, duration, type, endDate, freq
 		double newStartTime, double newDuration, TaskTypes newType,
         const std::string newEndDate, Frequency newFreq)

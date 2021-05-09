@@ -2,13 +2,16 @@
 #define SYSTEM_H
 
 #include "includes.h"
+#include "scheduler.h"
 
 using namespace std;
 
 class System
 {
 public:
-    System();
+    System(std::map<string, Task*> &taskMap,
+           std::map<string, std::map<string, vector<TimeBlock>>>& TBMap);
+    ~System();
 
     /***************
      ** ACCESSORS **
@@ -22,18 +25,7 @@ public:
 
 
 private:
-    /***************
-     ** ACCESSORS **
-     ***************/
-    bool validateTask(Task* task);   //Task to validate
-
-    /**************
-     ** MUTATORS **
-     **************/
-    void readJSON(string fname);    //JSON file to read
-    void writeJSON(string fname);   //JSON file to write to
-
-    vector<Task> tasks;             //Lists of tasks in the calendar
+    Scheduler* scheduler;
 
 };
 

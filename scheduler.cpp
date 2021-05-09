@@ -43,36 +43,36 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
  *     This function returns a pointer to the newly created task
  ***********************************************************/
  bool Scheduler::createNewTask(const string& name, const string& startDate,
-   double startTime, double duration, int intType, string endDate = "", int freq = 0 )
- {
+   double startTime, double duration, int intType, string endDate, int freq)
+{
 
-   //check if time is valid
-   if (timeValid(startDate, startTime, duration))
-   {
-     // create task
-     if( intType >= 1 && intType <= 6)
-     {
-
-         return addRTask(RecurrentTask(name, startDate,startTime,
-                          duration, Task::TaskTypes(intType), endDate, RecurrentTask::Frequency(1)));
-
-     }
-     else if(intType >= 7 && intType <=9)
+     cout << "Adding task" << endl;
+    //check if time and name are valid
+    if (timeValid(startDate, startTime, duration) && nameValid(name))
     {
-      //3- create task
-      return addTTask(TransientTask(name, startDate,startTime,
+        cout << "Task is valid" << endl;
+        // create task
+        if( intType >= 1 && intType <= 6)
+        {
+
+            return addRTask(RecurrentTask(name, startDate,startTime,
+                          duration, Task::TaskTypes(intType), endDate,
+                                       RecurrentTask::Frequency(freq)));
+        }
+        else if(intType >= 7 && intType <=9)
+        {
+            //3- create task
+            return addTTask(TransientTask(name, startDate,startTime,
                                         duration, Task::TaskTypes(intType)));
+        }
+    }
+    else if(intType == 0)
+    {
+        return addATask(name, startDate, startTime, duration);
+    }
 
-     }
-   }
-   else if(intType == 0)
-   {
-      return addATask(name, startDate,startTime, duration);
-
-   }
-
-   return true;
- }
+    return false;
+}
 
  /**********************************************************
   *
@@ -100,12 +100,13 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
 
    // convert string startDate to a date
    boost::gregorian::date taskDate = date_from_iso_string(startDate);
-   string taskYear = boost::lexical_cast<string>(d.year());
+   string taskYear = boost::lexical_cast<string>(taskDate.year());
+   string taskDay = boost::lexical_cast<string>(taskDate.day());
 
    // Replace the instance of recurrent task with antiTask
    if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
    {
-      if(timeBlockMap.at(taskYear).find(taskDate) != timeBlockMap.at(taskYear).end())
+      if(TimeBlockMap.at(taskYear).find(taskDay) != TimeBlockMap.at(taskYear).end())
       {
 
          int tbArraySize = static_cast<int>(duration / 0.25);
@@ -114,9 +115,9 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
          int indx = indexFinder(startTime);
          for(int i = indx; i < tbArraySize; i++)
          {
-           if(timeBlockMap[taskYear][Date][i].getTask() != nullptr)
+           if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
            {
-             timeBlockMap[taskYear][Date][i].setTask(nullptr);
+             TimeBlockMap.at(taskYear).at(taskDay).at(i).setTask(nullptr);
 
            }
          }
@@ -163,7 +164,7 @@ bool Scheduler::addTTask(TransientTask task)    //Task to add
  *     This function returns nothing. Adds the recurrent task
  *     to TimeBlockMap
  ***********************************************************/
-void Scheduler::addRTask(RecurrentTask task)    //Task to add
+bool Scheduler::addRTask(RecurrentTask task)    //Task to add
 {
     if(validateRTask(&task))
     {
@@ -173,23 +174,69 @@ void Scheduler::addRTask(RecurrentTask task)    //Task to add
             //cout << "Date is: " << d << endl;
             addTaskToTimeBlockMap(&task, d, TimeBlockMap);
         }
+        return true;
     }
-
+    return false;
 }
 
-bool Scheduler::deleteTTask(string taskName) //Task to delete
+/**********************************************************
+ *
+ * Method deleteTask(): Class Scheduler
+ *_________________________________________________________
+ * This method deletes a task by the given name
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     function requires the name of the task
+ *
+ * POST-CONDITIONS
+ *     This function returns true if the task is successfuly deleted.
+ ***********************************************************/
+bool Scheduler::deleteTask(string taskName) //Task to delete
 {
+  bool completed = false;
+  // task attributes
+  string startDate;
+  double startTime = 0.0;
+  double duration = 0;
 
-}
+  if(taskMap.find(taskName) != taskMap.end())
+  {
+      std::map<string, Task*>::iterator it = taskMap.begin();
+      startDate = it->second->getStartDateString();
+      startTime = it->second->getStartTime();
+      duration = it->second->getDuration();
+      taskMap.erase(taskName);
+  }
 
-bool Scheduler::deleteRTask(string taskName) //Task to delete
-{
+  boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
+  string taskYear = boost::lexical_cast<string>(taskDate.year());
 
-}
+  if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
+  {
+     if(TimeBlockMap.at(taskYear).find(startDate) != TimeBlockMap.at(taskYear).end())
+     {
 
-bool Scheduler::cancelRTask(AntiTask task)  //Task to represent a cancelled
-{
+        int tbArraySize = static_cast<int>(duration / 0.25);
 
+        // find the index of the starting time in the timeBlock vector
+        int count = 0;
+        int indx = indexFinder(startTime);
+        for(int i = indx; i < tbArraySize; i++)
+        {
+          if(TimeBlockMap.at(taskYear).at(startDate).at(i).getTask() != nullptr)
+          {
+            TimeBlockMap.at(taskYear).at(startDate).at(i).setTask(nullptr);
+            count +=1 ;
+          }
+        }
+        if (count == tbArraySize - 1)
+          {
+            completed = true;
+          }
+      }
+  }
+
+  return completed;
 }
 
 std::map<string, Task *> Scheduler::getTaskMap()
@@ -266,7 +313,7 @@ bool Scheduler::timeValid(string sDate, double sTime, double duration)
       return true;
     }
     // if the startDate is not in the timeBlockMap return true
-    else if(timeBlockMap.at(taskYear).find(sDate) == timeBlockMap.at(taskYear).end())
+    else if(TimeBlockMap.at(taskYear).find(sDate) == TimeBlockMap.at(taskYear).end())
     {
       return true;
     }
@@ -280,7 +327,7 @@ bool Scheduler::timeValid(string sDate, double sTime, double duration)
       int indx = indexFinder(sTime);
       for(int i = indx; i < tbArraySize; i++)
       {
-        if(timeBlockMap[taskYear][Date][i].getTask() != nullptr)
+        if(TimeBlockMap.at(taskYear).at(sDate).at(i).getTask() != nullptr)
         {
           return false;
         }
@@ -321,7 +368,7 @@ void Scheduler::printTimeBlockMap()
 
                 if(it3->getTask() != nullptr)
                 {
-                    cout << it3->getStartTime() << " ";
+                    cout << it3->tbGetStartTime() << " ";
                     cout << it3->getTask()->getName();
                     cout << endl;
                 }

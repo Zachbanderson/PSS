@@ -14,9 +14,10 @@
  *     This function will construct the System and load all
  *     tasks into memory
  ***********************************************************/
-System::System()
+System::System(std::map<string, Task *> &taskMap,
+               std::map<string, std::map<string, vector<TimeBlock> > > &TBMap)
 {
-    readJSON("stuff.json");
+    scheduler = new Scheduler(taskMap, TBMap);
 }
 
 /**********************************************************
@@ -106,64 +107,6 @@ void System::displayDeleteMenu()
  *     This function returns nothing
  ***********************************************************/
 void System::displayCalendar()
-{
-
-}
-
-
-/**********************************************************
- *
- * Method validateTask(): Class System
- *_________________________________________________________
- * This method checks the name and timespan of a task to see
- * if it is valid
- *_________________________________________________________
- * PRE-CONDITIONS
- *     task(Task) - Task to validate
- *
- * POST-CONDITIONS
- *     This function returns true if the task is valid. False
- *     otherwise
- ***********************************************************/
-bool System::validateTask(Task* task)
-{
-    return true;
-}
-
-/**********************************************************
- *
- * Method readJSON(): Class System
- *_________________________________________________________
- * This method reads the JSON file that stores task data and
- * populates the tasks vector. Called at startup, should not
- * be called anywhere else
- *_________________________________________________________
- * PRE-CONDITIONS
- *     fname(string) - Name of the file with all the JSON data
- *
- * POST-CONDITIONS
- *     This function populates the tasks vector. Returns nothing
- ***********************************************************/
-void System::readJSON(string fname)
-{
-
-}
-
-/**********************************************************
- *
- * Method writeJSON(): Class System
- *_________________________________________________________
- * This method extracts all tasks from the tasks vector and
- * writes it to a JSON file specified by fname
- *_________________________________________________________
- * PRE-CONDITIONS
- *     fname(string) - Name of the file to write the JSON data
- *
- * POST-CONDITIONS
- *     This function writes all the data in the tasks vector
- *     to a file. Returns nothing
- ***********************************************************/
-void System::writeJSON(string fname)
 {
 
 }

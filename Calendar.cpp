@@ -34,7 +34,7 @@ void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
         serialized += "," + it->second->serialize();
     }
     serialized += "]";
-    cout << serialized << endl;
+    //cout << serialized << endl;
 
     json written = json::parse(serialized);
     string pretty = written.dump(2);
@@ -58,7 +58,7 @@ void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
  * POST-CONDITIONS
  *     This function returns nothing
  ***********************************************************/
-void displayCalendar(string date, int rangeOfDays, std::map<string,
+void Calendar::displayCalendar(string date, int rangeOfDays, std::map<string,
                                                 std::map<string,
                                                  vector<TimeBlock>>>
                                                  &TBMap)
@@ -116,31 +116,29 @@ void displayCalendar(string date, int rangeOfDays, std::map<string,
         if(TBMap.find(taskYear) != TBMap.end())
         {
           // Date is in Year in time block map
-          if(TBMap.at(taskYear).find(taskDay) != TBMap.at(taskYear).end())
-          {
-            // Read the tasks from the time blocks for the whole day (24 * rangeOfDays)
-            for(float i = 0; i < (24 * rangeOfDays); i += .25)
+            string day = boost::lexical_cast<string>(ditr->day_of_year());
+            //cout << "Day is: " << day << endl;
+            if(TBMap.at(taskYear).find(day) != TBMap.at(taskYear).end())
             {
-              // Checking to see if any time blocks are occupied with a task ===This is what im unsure about=== 
-              if(TBMap.at(taskYear).at(taskDay).at
-                (i).get_task() != nullptr
-                && TBMap.at(taskYear).at(taskDay).
-                at((i).get_task())->getType()
-                != "Cancellation")
-              { 
-                // Print Task to Console
-                string taskName = TBMap.at(taskYear).at(taskDay).at(i).get_task()->getName();
-                string taskStartTime = TBMap.at(taskYear).at(taskDay).at(i).get_task()->getStartTime();
-                double taskDuration = TBMap.at(taskYear).at(taskDay).at(i).get_task()->getDuration());
-                cout << taskStartTime << " " << taskName << endl; 
-                i += taskDuration;
-              } 
+              // Read the tasks from the time blocks for the whole day (24 * rangeOfDays)
+              for(int i = 0; i < 96; i++)
+              {
+                // Checking to see if any time blocks are occupied with a task ===This is what im unsure about===
+                if(TBMap.at(taskYear).at(day).at(i).getTask() != nullptr
+                  && TBMap.at(taskYear).at(day).at(i).getTask()->getType()
+                  != "Cancellation")
+                {
+                  // Print Task to Console
+                  string taskName = TBMap.at(taskYear).at(day).at(i).getTask()->getName();
+                  double taskStartTime = TBMap.at(taskYear).at(day).at(i).getTask()->getStartTime();
+                  double taskDuration = TBMap.at(taskYear).at(day).at(i).getTask()->getDuration();
+                  double taskEndTime = taskStartTime + taskDuration;
+                  cout << taskStartTime << " to " << taskEndTime << ": " << taskName << endl;
+                  i += taskDuration / .25;
+                }
+              }
+
             }
-          }
-          else
-          {
-            cout << "No tasks scheduled." << endl;
-          }
         }
         else 
         {
@@ -240,7 +238,7 @@ std::map<string, Task*> Calendar::readFromFile(std::map<string,
         }
     }
     cout << "Printing valid map" << endl;
-    printValid(TBMap);
+    //printValid(TBMap);
     return taskMap;
 }
 

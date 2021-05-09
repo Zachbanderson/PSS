@@ -24,51 +24,6 @@ TransientTask::TransientTask()
 
 /**********************************************************
  *
- * Constructor TransientTask(const TransientTask& otherTask): Class TransientTask
- *_________________________________________________________
- * This method is the copy constructor for the TransientTask class
- *_________________________________________________________
- * PRE-CONDITIONS
- *     otherTask: The task to copy from
- *
- * POST-CONDITIONS
- *     This function will construct a TransientTask class
- ***********************************************************/
-
-TransientTask::TransientTask(const TransientTask& otherTask) : 
-	Task(otherTask.name, otherTask.startDate, otherTask.startTime,
-	otherTask.duration, otherTask.type)
-{
-
-}
-
-/**********************************************************
- *
- * Overloaded Assignment operator=(const TransientTask& otherTask): Class TransientTask
- *_________________________________________________________
- * This method assigns an instance of TransientTask to another
- *_________________________________________________________
- * PRE-CONDITIONS
- *     otherTask: The task to copy from
- *
- * POST-CONDITIONS
- *     This function will assign the right hand variable to a copy of the left
- ***********************************************************/
-
-TransientTask& TransientTask::operator=(const TransientTask& otherTask)
-{
-	this->~TransientTask();
-	name = otherTask.name;
-	startDate = otherTask.startDate;
-	startTime = otherTask.startTime;
-	duration = otherTask.duration;
-	type = otherTask.type;
-	
-	return *this;
-}
-
-/**********************************************************
- *
  * Method setType(int choice): Class TransientTask
  *_________________________________________________________
  * This method sets the type of TransientTask

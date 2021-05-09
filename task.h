@@ -26,9 +26,6 @@ public:
 	Task(const std::string& newName, const std::string& newStartDate,	//name, startDate, startTime, duration, type
 		double newStartTime, double newDuration, TaskTypes newType);
 	
-	// Copy constructor
-	Task(const Task& otherTask);
-	
 	// Overloaded assignment
 	Task& operator=(const Task& otherTask);
 
@@ -36,24 +33,25 @@ public:
 	 ** ACCESSORS **
 	 ***************/
 	std::string getName() const;
-  date getStartDate() const;
+    date getStartDate() const;
+    std::string getStartDateString() const;
 	double getStartTime() const;
+    std::string getStartTimeString() const;
 	double getDuration() const;
 	std::string getType() const;
-  virtual void display() const;							// print protected member variables
-  virtual std::string serialize() const;
+    virtual void display() const;							// print protected member variables
+    virtual std::string serialize() const;
 
 	/**************
 	 ** MUTATORS **
 	 **************/
 	void setName(const std::string& newName);				// set name of task
-  void setStartDate(const date newStartDate);				// set start date of task
+    void setStartDate(const date newStartDate);				// set start date of task
 	void setStartTime(double newStartTime);					// set start time of task
-  void setDuration(double newDuration);					// set duration of task
+    void setDuration(double newDuration);					// set duration of task
 	virtual void setType(int choice) = 0;					// set type of task
 
-
-  virtual ~Task() {}
+    virtual ~Task() {}
 
 	// To be moved to a different class (maybe)
 	/**********************************************************

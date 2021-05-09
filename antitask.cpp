@@ -23,69 +23,6 @@ AntiTask::AntiTask()
 
 /**********************************************************
  *
- * Constructor AntiTask(const AntiTask& otherTask): Class AntiTask
- *_________________________________________________________
- * This method is the copy constructor for the AntiTask class
- *_________________________________________________________
- * PRE-CONDITIONS
- *     otherTask: The task to copy from
- *
- * POST-CONDITIONS
- *     This function will construct a AntiTask class
- ***********************************************************/
-
-AntiTask::AntiTask(const AntiTask& otherTask) :
-	Task(otherTask.name, otherTask.startDate, otherTask.startTime,
-		otherTask.duration, otherTask.type)
-{
-
-}
-
-/**********************************************************
- *
- * Overloaded Assignment operator=(const AntiTask& otherTask): Class AntiTask
- *_________________________________________________________
- * This method assigns an instance of AntiTask to another
- *_________________________________________________________
- * PRE-CONDITIONS
- *     otherTask: The task to copy from
- *
- * POST-CONDITIONS
- *     This function will assign the right hand variable to a copy of the left
- ***********************************************************/
-
-AntiTask& AntiTask::operator=(const AntiTask& otherTask)
-{
-	this->~AntiTask();
-	name = otherTask.name;
-	startDate = otherTask.startDate;
-	startTime = otherTask.startTime;
-	duration = otherTask.duration;
-	type = otherTask.type;
-	
-	return *this;
-}
-
-/**********************************************************
- *
- * Destructor AntiTask: Class Antitask
- *_________________________________________________________
- * This method is the destructor for the AntiTask
- *_________________________________________________________
- * PRE-CONDITIONS
- *     none
- *
- * POST-CONDITIONS
- *     This function will destroy an AntiTask
- ***********************************************************/
-
-AntiTask::~AntiTask()
-{
-
-}
-
-/**********************************************************
- *
  * Method setType(int choice): Class AntiTask
  *_________________________________________________________
  * This method sets the type of AntiTask

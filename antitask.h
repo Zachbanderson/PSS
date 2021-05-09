@@ -10,12 +10,10 @@ public:
 	AntiTask(const std::string& newName, const std::string& newStartDate,					// name, startDate, startTime, duration, type = Cancellation
 		double newStartTime, double newDuration)
 		: Task(newName, newStartDate, newStartTime, newDuration, Task::Cancellation) {}
-	AntiTask(const AntiTask& otherTask);
 	AntiTask& operator=(const AntiTask& otherTask);
 
-    	void setType(int choice) override;
-    	void display() const override;			// print protected member variables
-    	~AntiTask() override;
+    void setType(int choice) override;
+    void display() const override;			// print protected member variables
 };
 
 	/******************************

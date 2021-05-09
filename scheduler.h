@@ -21,22 +21,22 @@ public:
 
     /**************
      ** MUTATORS **
-     **************/
+     **************/    
+    bool createNewTask(const string& name, const string& startDate,
+                       double startTime, double duration, int type,
+                       string endDate = "", int freq = 0 );
     bool addTask(Task* task);
     bool addTTask(TransientTask task);
     bool addRTask(RecurrentTask task);
-    bool deleteTTask(string taskName);
-    bool deleteRTask(string taskName);
-    bool cancelRTask(AntiTask task);
+    bool deleteTask(string taskName);
+    bool addATask(const std::string& name, const std::string& startDate,
+      double startTime, double duration);
 
 
 private:
     std::map<string, Task*> taskMap;
     std::map<string, std::map<string, vector<TimeBlock>>> TimeBlockMap;
 
-
-    bool createNewTask(string name, string startDate, double startTime,
-        double duration, int type, string endDate = "", int freq = 0 );
 
     /***************
      ** ACCESSORS **
