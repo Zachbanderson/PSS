@@ -225,10 +225,11 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
 
   boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
   string taskYear = boost::lexical_cast<string>(taskDate.year());
+  string taskDay = boost::lexical_cast<string>(date.day_of_year());
 
   if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
   {
-     if(TimeBlockMap.at(taskYear).find(startDate) != TimeBlockMap.at(taskYear).end())
+     if(TimeBlockMap.at(taskYear).find(taskDay) != TimeBlockMap.at(taskYear).end())
      {
 
         int tbArraySize = static_cast<int>(duration / 0.25);
@@ -238,9 +239,9 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
         int indx = indexFinder(startTime);
         for(int i = indx; i < tbArraySize; i++)
         {
-          if(TimeBlockMap.at(taskYear).at(startDate).at(i).getTask() != nullptr)
+          if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
           {
-            TimeBlockMap.at(taskYear).at(startDate).at(i).setTask(nullptr);
+            TimeBlockMap.at(taskYear).at(taskDay).at(i).setTask(nullptr);
             count +=1 ;
           }
         }
