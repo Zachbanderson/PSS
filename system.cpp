@@ -528,7 +528,7 @@ void System::displayEditMenu()
             {
                 if (scheduler->timeValid(userInput, tStartTime, tDuration)) //Check if time is available
                 {
-                    taskDate = userInput;
+                    tDate = userInput;
                     validInput = true;
                 }
                 else
@@ -1040,7 +1040,7 @@ double System::convertTimeStrToFloat(string userTime) {
     string minutes = userTime.substr(3, 5);
     int intHours = stoi(hours);
     int intMins = stoi(minutes);
-    double time = static_cast<double>(intHours + (intMins / 60));
+    double time = static_cast<double>(intHours + ((double)intMins / 60));
     
     return time;
 }
