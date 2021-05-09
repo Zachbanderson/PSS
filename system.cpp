@@ -757,7 +757,7 @@ void System::displayDeleteMenu()
                     }
                     else if (validDurationFormat(userDuration)) {
                         cout << "Creating an anti-task with a duration of" << userDuration << ", time " << userTime << ", and name " << taskName << "\n";
-
+                        scheduler->createNewTask(taskName, userDate, convertTimeStrToFloat(userTime), convertDuration(userDuration), 0, "", 0);
                     }
                     else {
                         cout << "Duration is not valid.";
