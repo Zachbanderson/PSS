@@ -17,7 +17,7 @@ public:
      ** ACCESSORS **
      ***************/
     std::map<string, Task*> getTaskMap();
-
+    Task* getTask(const string taskName, const string taskDate) const;
 
     /**************
      ** MUTATORS **

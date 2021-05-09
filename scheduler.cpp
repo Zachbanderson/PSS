@@ -239,6 +239,44 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
   return completed;
 }
 
+/**********************************************************
+ *
+ * Method getTask(): Class Scheduler
+ *_________________________________________________________
+ * This method checks if the name of a task is valid
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     taskName(string)- The name of the task to return
+ *     taskDate(boost::gregorian::date) - The date the task is on
+ *
+ * POST-CONDITIONS
+ *     This function returns a pointer to the task if found
+ *     otherwise a nullpointer
+ ***********************************************************/
+Task* Scheduler::getTask(const string taskName, const string taskDate) const
+{
+    date date = date_from_iso_string(taskDate);
+    string taskYear = boost::lexical_cast<string>(date.year());
+    string taskDay = boost::lexical_cast<string>(date.day_of_year());
+    if (TimeBlockMap.find(taskYear) == TimeBlockMap.end() || TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())    //Year or day doesn't exist in timeblockmap
+    {
+        return nullptr;
+    }
+    else
+    {
+        vector<TimeBlock> dayVector = TimeBlockMap.at(taskYear).at(taskDay);
+        for (vector<TimeBlock>::iterator iter = dayVector.begin(); iter != dayVector.end(); iter++)
+        {
+            Task* checkTask = iter->getTask();
+            if (checkTask != NULL && checkTask->getName() == taskName)  //Task exists for given timeblock
+            {
+                return checkTask;
+            }
+        }
+        return nullptr;
+    }
+}
+
 std::map<string, Task *> Scheduler::getTaskMap()
 {
     return taskMap;

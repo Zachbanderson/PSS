@@ -23,6 +23,16 @@ public:
 
     void displayCalendar();
 
+    /***************
+     ** UTILITY **
+     ***************/
+    bool validDateFormat(string userDate);
+    bool validDurationFormat(string userDuration);
+    float convertDuration(string userDuration);
+    bool validTimeFormat(string userTime);
+    bool stringIsNumber(string in);
+    int stringToInt(const string in);
+    int getIntUserInput();
 
 private:
     Scheduler* scheduler;
