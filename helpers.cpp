@@ -42,6 +42,7 @@ vector<TimeBlock> createTimeBlocks(Task *task)
         }
 
     }
+    cout << "Created whole vector" << endl;
 
     return tbVector;
 }
@@ -72,13 +73,13 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
     //If we haven't found a task with this year yet
     if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
     {
-        //cout << "Haven't found the year" << endl;
+        cout << "Haven't found the year" << endl;
         //Inserting a blank map at the year mark
         TimeBlockMap.insert(std::pair<string, std::map<string,
                             vector<TimeBlock>>>(taskYear, std::map<string,
                                                 vector<TimeBlock>>()));
-//        cout << "Inserted " << taskYear << endl;
-//        cout << "Inserted " << taskDay << " at " << taskYear << endl;
+        cout << "Inserted " << taskYear << endl;
+        cout << "Inserted " << taskDay << " at " << taskYear << endl;
         //Creating a vector of 96 empty TimeBlocks at the day of the year
         TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
                                          (taskDay, createTimeBlocks(task)));
@@ -88,17 +89,18 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
     //If the year is in the map but the day isn't
     else if(TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())
     {
-        //cout << "Haven't found the day" << endl;
+        cout << "Haven't found the day" << endl;
         TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
                                          (taskDay, createTimeBlocks(task)));
-//        cout << "Inserted " << taskDay << " at " << taskYear << endl;
-//        cout << "Added the TimeBlocks" << endl;
+        cout << "Inserted " << taskDay << " at " << taskYear << endl;
+        cout << "Added the TimeBlocks" << endl;
     }
 
     //Trying to add a task on a day where there is already a scheduled task
     //This is the only time where the function may return false
     else
     {
+        cout << "Year and day already exist" << endl;
         //Checking the TimeBlocks to see if any are occupied
         for(float i = 0; i < task->getDuration(); i += .25)
         {
@@ -115,6 +117,7 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
         {
             //This line accesses the TimeBlock at the correct place. Doesn't
             //need to search through the vector
+            cout << "Adding task at TimeBlock " << ((task->getStartTime() + i) / .25) << endl;
             TimeBlockMap.at(taskYear).at(taskDay).at
                     (((task->getStartTime() + i) / .25)).setTask(task);
         }
@@ -176,24 +179,51 @@ int convertTypeToInt(string type)
  * POST-CONDITIONS
  *     This function prints the years and days that are in the valid map
  ***********************************************************/
-void printValid(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlockMap)
+void printTimeBlockMap(std::map<string, std::map<string, vector<TimeBlock>>> &TimeBlockMap)
 {
     for(std::map<string, std::map<string, vector<TimeBlock>>>::iterator
         it = TimeBlockMap.begin(); it != TimeBlockMap.end(); it++)
     {
         //Printing out the year and the days that tasks happen in that year
-        cout << it->first << ": ";
-        cout << it->second.begin()->first;
-        std::map<string, TimeBlock>::iterator it2;
+        cout << it->first << ":\n";
+        cout << it->second.begin()->first << " ";
+        for(std::vector<TimeBlock>::iterator i = it->second.begin()->second.begin();
+            i != it->second.begin()->second.end(); i++)
+        {
+            if(i->getTask() != nullptr)
+            {
+                cout << i->getTask()->getName() << " " << i->tbGetStartTime() << " ";
+            }
+        }
         for(std::map<string, vector<TimeBlock>>::iterator it2 =
             std::next(it->second.begin()); it2 != it->second.end(); it2++)
         {
-            cout << ", " << it2->first;
+            cout << it2->first << " ";
+            int i = 0;
+            for(std::vector<TimeBlock>::iterator it3 = it2->second.begin();
+                it3 != it2->second.end(); it3++)
+            {
+                cout << "At loc " << i << endl;
+                if(it3->getTask() != nullptr)
+                {
+                    cout << "Not nullpointer" << endl;
+                    cout << it3->getTask()->getName() << " " << it3->tbGetStartTime() << " ";
+                }
+                i++;
+            }
+            cout << endl;
         }
         cout << endl;
     }
 }
 
+void printTaskMap(std::map<string, Task*> m)
+{
+    for(std::map<string, Task*>::iterator it = m.begin(); it != m.end(); it++)
+    {
+        cout << "Name: " << it->first << endl;
+    }
+}
 /**********************************************************
  *
  * Method indexFinder(): Helper function
