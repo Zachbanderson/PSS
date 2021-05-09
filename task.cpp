@@ -315,6 +315,24 @@ string Task::getType() const
 
 /**********************************************************
  *
+ * Method getTypeInt() const: Class Task
+ *_________________________________________________________
+ * This method returns the type of Task as an int
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     None
+ *
+ * POST-CONDITIONS
+ *     Returns the type of task as an int
+ ***********************************************************/
+
+int Task::getTypeInt() const
+{
+	return type;
+}
+
+/**********************************************************
+ *
  * Method display() const: Class Task
  *_________________________________________________________
  * This method displays the information of tTask

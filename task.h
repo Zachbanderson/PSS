@@ -38,6 +38,7 @@ public:
 	double getStartTime() const;
     std::string getStartTimeString() const;
 	double getDuration() const;
+	int Task::getTypeInt() const;
 	std::string getType() const;
     virtual void display() const;							// print protected member variables
     virtual std::string serialize() const;
