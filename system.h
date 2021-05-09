@@ -9,6 +9,7 @@ using namespace std;
 class System
 {
 public:
+    System();
     System(std::map<string, Task*> &taskMap,
            std::map<string, std::map<string, vector<TimeBlock>>>& TBMap);
     ~System();
@@ -33,10 +34,13 @@ public:
     bool stringIsNumber(string in);
     int stringToInt(const string in);
     int getIntUserInput();
+    double System::convertTimeStrToFloat(string userTime);
 
 private:
     Scheduler* scheduler;
-
+    Calendar* calendar;
+    std::map<string, std::map<string, vector<TimeBlock>>> map;
+    std::map<string, Task*> taskMap;
 };
 
 #endif // SYSTEM_H

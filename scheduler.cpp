@@ -266,12 +266,18 @@ Task* Scheduler::getTask(const string taskName, const string taskDate) const
     else
     {
         vector<TimeBlock> dayVector = TimeBlockMap.at(taskYear).at(taskDay);
-        for (vector<TimeBlock>::iterator iter = dayVector.begin(); iter != dayVector.end(); iter++)
+        for (vector<TimeBlock>::iterator iter = dayVector.begin(); iter != dayVector.end(); ++iter)
         {
             Task* checkTask = iter->getTask();
-            if (checkTask != NULL && checkTask->getName() == taskName)  //Task exists for given timeblock
-            {
-                return checkTask;
+            try {
+                if (checkTask != NULL && checkTask->getName() == taskName)  //Task exists for given timeblock
+                {
+                    return checkTask;
+                }
+            }
+            catch (...) {
+                cout << "Exceptionally couldn't find task.\n";
+                return nullptr;
             }
         }
         return nullptr;

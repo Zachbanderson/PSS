@@ -3,6 +3,7 @@
 #include "includes.h"
 #include "json.hpp"
 #include "scheduler.h"
+#include "system.h"
 
 
 using namespace std;
@@ -49,7 +50,21 @@ void printTask(TimeBlock* tb_array, int tb_array_size)
 
 int main()
 {
+    {
+        //cout << "Starting" << endl;
+        //Calendar calendar;
+        ////cout << "Created calendar" << endl;
+        //std::map<string, std::map<string, vector<TimeBlock>>> map;
+        //std::map<string, Task*> taskMap = calendar.readFromFile(map, "data.json");
+        ////cout << "Read tasks" << endl;
+        ////printValid(map);
 
+        //System sys(taskMap, map);
+        //sys.displayMainMenu();
+        System* sys = new System();
+        sys->displayMainMenu();
+        return 0;
+    }
     //Testing reading/writing JSON
     {
         cout << "Starting" << endl;
@@ -62,7 +77,7 @@ int main()
 
         Scheduler scheduler(taskMap, map);
 
-        calendar.displayCalendar("20200415", 60, map);
+        calendar.displayCalendar("20200415", 7, map);
 
 
         if(scheduler.createNewTask("Present this project", "20200511", 17.50,
@@ -75,16 +90,17 @@ int main()
             cout << "Conflict" << endl;
         }
 
-        taskMap = scheduler.getTaskMap();
-        //printTaskMap(taskMap);
-        map = scheduler.getTBMap();
-        //printValid(map);
-
         calendar.displayCalendar("20200415", 60, map);
 
         taskMap = scheduler.getTaskMap();
-        //cout << "Got task map" << endl;
-        calendar.writeToFile(taskMap, "stored.json");
+        Task* testTask = scheduler.getTask("Present this project", "20200511");
+        if (testTask) {
+            string temp = testTask->getName();
+            cout << "Task name in main: " << testTask->getName();
+        }
+        else
+            cout << "Not found";
+        //calendar.writeToFile(taskMap, "stored.json");
 
         return 0;
     }
