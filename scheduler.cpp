@@ -113,7 +113,7 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
 
          // find the index of the startTime in the timeBlock vector
          int indx = indexFinder(startTime);
-         for(int i = indx; i < tbArraySize; i++)
+         for(int i = indx; i < tbArraySize + indx; i++)
          {
            if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
            {
@@ -225,7 +225,7 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
 
   boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
   string taskYear = boost::lexical_cast<string>(taskDate.year());
-  string taskDay = boost::lexical_cast<string>(date.day_of_year());
+  string taskDay = boost::lexical_cast<string>(taskDate.day_of_year());
 
   if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
   {
@@ -237,7 +237,8 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
         // find the index of the starting time in the timeBlock vector
         int count = 0;
         int indx = indexFinder(startTime);
-        for(int i = indx; i < tbArraySize; i++)
+        int i = indx;
+        for(i = indx; i < indx + tbArraySize; i++)
         {
           if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
           {
@@ -246,7 +247,7 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
           }
         }
         // check to see if all the timeBlocks associated with the task is deleted
-        if (count == tbArraySize - 1)
+        if (count == tbArraySize)
           {
             completed = true;
             // cout << "TimeBlocks associated with the task is also deleted " << endl;
@@ -387,7 +388,7 @@ bool Scheduler::timeValid(string sDate, double sTime, double duration)
 
       // find the index of the startTime in the timeBlock vector
       int indx = indexFinder(sTime);
-      for(int i = indx; i < tbArraySize; i++)
+      for(int i = indx; i < tbArraySize + indx; i++)
       {
         if(TimeBlockMap.at(taskYear).at(sDate).at(i).getTask() != nullptr)
         {
