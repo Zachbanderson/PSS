@@ -202,11 +202,25 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
 
   if(taskMap.find(taskName) != taskMap.end())
   {
-      std::map<string, Task*>::iterator it = taskMap.begin();
+      std::map<string, Task*>::iterator it = taskMap.find(name);
       startDate = it->second->getStartDateString();
       startTime = it->second->getStartTime();
       duration = it->second->getDuration();
       taskMap.erase(taskName);
+      // cout << "task: " << name << "is deleted" <<endl;
+  }
+
+  // Look for any antiTask with the same date, time and duration
+  for (std::map<string, Task*>::const_iterator it = taskMap.begin(); it != taskMap.end(); ++it)
+  {
+
+     if(( it->second->getStartDate() = startDate) && ( it->second->getStartTime() =startTime)
+        && (it->second->getDuration() =duration))
+         {
+           // delete antiTask
+           taskMap.erase(it->first);
+         }
+         // Cout << "Anti tasks associated with the reucrrent task is also deleted" << endl;
   }
 
   boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
@@ -230,9 +244,11 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
             count +=1 ;
           }
         }
+        // check to see if all the timeBlocks associated with the task is deleted
         if (count == tbArraySize - 1)
           {
             completed = true;
+            // cout << "TimeBlocks associated with the task is also deleted " << endl;
           }
       }
   }
