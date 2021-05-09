@@ -202,7 +202,7 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
 
   if(taskMap.find(taskName) != taskMap.end())
   {
-      std::map<string, Task*>::iterator it = taskMap.find(name);
+      std::map<string, Task*>::iterator it = taskMap.find(taskName);
       startDate = it->second->getStartDateString();
       startTime = it->second->getStartTime();
       duration = it->second->getDuration();
@@ -214,8 +214,8 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
   for (std::map<string, Task*>::const_iterator it = taskMap.begin(); it != taskMap.end(); ++it)
   {
 
-     if(( it->second->getStartDate() = startDate) && ( it->second->getStartTime() =startTime)
-        && (it->second->getDuration() =duration))
+     if(( it->second->getStartDate() == date_from_iso_string(startDate)) && ( it->second->getStartTime() == startTime)
+        && (it->second->getDuration() == duration))
          {
            // delete antiTask
            taskMap.erase(it->first);
