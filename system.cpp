@@ -490,6 +490,11 @@ void System::displayEditMenu()
     int tType = editTask->getTypeInt();
     string tEndDate = "";   //TODO: How to get these values from a recurrent task
     int tFreq = 1;
+    if (editTask->isRecurrent())
+    {
+        tEndDate = to_iso_string(static_cast<RecurrentTask*>(editTask)->getEndDate());
+        tFreq = static_cast<RecurrentTask*>(editTask)->getFreq();
+    }
 
     switch (editChoice)
     {
@@ -623,11 +628,19 @@ void System::displayEditMenu()
     }
 
     if (scheduler->deleteTask(editTask->getName())) {
-        if (scheduler->createNewTask(tName, tDate, tStartTime, tDuration, tType)) {
+        if (scheduler->createNewTask(tName, tDate, tStartTime, tDuration, tType, tEndDate, tFreq)) {
             cout << "Successfully modified task.\n";
         }
         else {
-            scheduler->createNewTask(editTask->getName(), editTask->getStartDateString(), editTask->getStartTime(), editTask->getDuration(), editTask->getTypeInt());
+            if (editTask->isTransient()) {
+                scheduler->createNewTask(editTask->getName(), editTask->getStartDateString(), editTask->getStartTime(), editTask->getDuration(), editTask->getTypeInt());
+            }
+            else if (editTask->isRecurrent()) {
+                scheduler->createNewTask(editTask->getName(), editTask->getStartDateString(), editTask->getStartTime(), editTask->getDuration(), editTask->getTypeInt(), to_iso_string(static_cast<RecurrentTask*>(editTask)->getEndDate()), static_cast<RecurrentTask*>(editTask)->getFreq());
+            }
+            else {
+                cout << "This shouldn't have printed.\n";
+            }
             cout << "Unable to insert new task.\n";
         }
     }
