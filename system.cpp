@@ -122,7 +122,6 @@ void System::displayCreateMenu()
     bool validName = true;
     bool timeAvailable = true;
     string userFrequency;
-    boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string(userDate);
     do {
         cout << "Select type:\n";
         cout << "1 - Transient\n";
@@ -158,8 +157,8 @@ void System::displayCreateMenu()
 
                         }
                         else if (validDurationFormat(userDuration) == true) {
-
-                            if(scheduler->timeValid(userDateAsDate, convertTimeStrToFloat(userTime), convertDuration(userDuration))){
+                            
+                            if(scheduler->timeValid(date_from_iso_string(userDate), convertTimeStrToFloat(userTime), convertDuration(userDuration))){
                                 cout << "Enter the name of the task: ";
                                 getline(cin, taskName);
                                 if (taskName.length() == 1 && taskName[0] == 'q') {
@@ -259,7 +258,7 @@ void System::displayCreateMenu()
 
                                     //AND time and date are available
 
-                                    if (scheduler->timeValid(userDateAsDate, convertTimeStrToFloat(userTime), convertDuration(userDuration))) { //time is available
+                                    if (scheduler->timeValid(date_from_iso_string(userDate), convertTimeStrToFloat(userTime), convertDuration(userDuration))) { //time is available
 
                                         cout << "Enter the name of the task: ";
                                         getline(cin, taskName);
