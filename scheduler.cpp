@@ -415,7 +415,7 @@ bool Scheduler::nameValid(string name)  //Name of the new task
  *       for scheduling a new task
  ***********************************************************/
 
- bool Scheduler::timeValid(double date, double sTime, double duration)
+ bool Scheduler::timeValid(boost::gregorian::date date, double sTime, double duration)
  {
      bool valid = false;
 
@@ -428,7 +428,7 @@ bool Scheduler::nameValid(string name)  //Name of the new task
        valid = true;
      }
      // if the startDate is not in the timeBlockMap return true
-     else if(timeBlockMap.at(taskYear).find(taskDay) == timeBlockMap.at(taskYear).end())
+     else if(TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())
      {
        valid = true;
      }
@@ -442,7 +442,7 @@ bool Scheduler::nameValid(string name)  //Name of the new task
        int indx = indexFinder(sTime);
        for(int i = indx; i < (tbArraySize + indx) ; i++)
        {
-         if(timeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
+         if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
          {
            valid = false;
          }
