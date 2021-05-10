@@ -17,7 +17,7 @@ public:
 	RecurrentTask(const std::string& newName, const std::string& newStartDate,		//name, startDate, startTime, duration, type, endDate, freq
 		double newStartTime, double newDuration, TaskTypes newType,
         const std::string newEndDate, Frequency newFreq)
-		: Task(newName, newStartDate, newStartTime, newDuration, newType) 
+		: Task(newName, newStartDate, newStartTime, newDuration, newType)
 	{
         endDate = date_from_iso_string(newEndDate);
 		freq = newFreq;
@@ -55,7 +55,7 @@ private:
 	******************************/
 
 	/****************************************************************
-	RecurrentTask(const std::string& newName, const std::string& newStartDate,	
+	RecurrentTask(const std::string& newName, const std::string& newStartDate,
 		double newStartTime, double newDuration, TaskTypes newType,
 		const std::string& newEndDate, Frequency newFreq)
 		: Task(newName, newStartDate, newStartTime, newDuration, newType)

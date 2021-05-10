@@ -92,41 +92,74 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
  bool Scheduler::addATask(const std::string& name, const std::string& startDate,
    double startTime, double duration)    //Task to add
  {
-   // create anti task
-   AntiTask task = AntiTask(name, startDate, startTime, duration );
+   bool taskCreated = false;
 
-   // save task into taskMap
-   taskMap.insert(std::pair<string, Task*>(task.getName(), &task));
-
-   // convert string startDate to a date
-   boost::gregorian::date taskDate = date_from_iso_string(startDate);
-   string taskYear = boost::lexical_cast<string>(taskDate.year());
-   string taskDay = boost::lexical_cast<string>(taskDate.day());
-
-   // Replace the instance of recurrent task with antiTask
-   if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
+   // if we successfuly null one instance of the recurrent task
+   // then we will create antiTask and add it to the taskMap
+   if(nullTimeBlockTask(startDate, startTime, duration))
    {
-      if(TimeBlockMap.at(taskYear).find(taskDay) != TimeBlockMap.at(taskYear).end())
-      {
+     // create anti task
+     AntiTask task = AntiTask(name, startDate, startTime, duration );
 
-         int tbArraySize = static_cast<int>(duration / 0.25);
+     // save task into taskMap
+     taskMap.insert(std::pair<string, Task*>(task.getName(), &task));
+     taskCreated = true;
+   }
 
-         // find the index of the startTime in the timeBlock vector
-         int indx = indexFinder(startTime);
-         for(int i = indx; i < tbArraySize + indx; i++)
-         {
-           if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
-           {
-             TimeBlockMap.at(taskYear).at(taskDay).at(i).setTask(nullptr);
-
-           }
-         }
-       }
-     }
-
-     return false;
+     return taskCreated;
  }
 
+
+ /**********************************************************
+  *
+  * Method nullTimeBlockTask(): Class Scheduler
+  *_________________________________________________________
+  * This method nulls the task on instance of
+  * Recurrent task
+  *_________________________________________________________
+  * PRE-CONDITIONS
+  *     startTime, startDate and duration of the recurrent task
+  *
+  * POST-CONDITIONS
+  *     This function returns true if it successfuly nulls
+  *     the task inside the TimeBlockMap
+  ***********************************************************/
+ bool nullTimeBlockTask(const string& startDate, double startTime, double duration)
+{
+  boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
+  string taskYear = boost::lexical_cast<string>(taskDate.year());
+  string taskDay = boost::lexical_cast<string>(taskDate.day_of_year());
+
+  if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
+  {
+     if(TimeBlockMap.at(taskYear).find(taskDay) != TimeBlockMap.at(taskYear).end())
+     {
+
+        int tbArraySize = static_cast<int>(duration / 0.25);
+
+        // find the index of the starting time in the timeBlock vector
+        int count = 0;
+        int indx = indexFinder(startTime);
+        int i = indx;
+        for(i = indx; i < indx + tbArraySize; i++)
+        {
+          if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
+          {
+            TimeBlockMap.at(taskYear).at(taskDay).at(i).setTask(nullptr);
+            count +=1 ;
+          }
+        }
+        // check to see if all the timeBlocks associated with the task is deleted
+        if (count == tbArraySize)
+          {
+            cout << count << " = number of timeblocks that were nulled." << endl;
+            completed = true;
+            // cout << "TimeBlocks associated with the task is also deleted " << endl;
+          }
+      }
+  }
+
+}
 /**********************************************************
  *
  * Method addTTask(): Class Scheduler
@@ -194,65 +227,69 @@ bool Scheduler::addRTask(RecurrentTask* task)    //Task to add
  ***********************************************************/
 bool Scheduler::deleteTask(string taskName) //Task to delete
 {
-  bool completed = false;
+  bool deleted = false;
+
   // task attributes
-  string startDate;
+  date startDate = date();
   double startTime = 0.0;
   double duration = 0;
+  int type = 0;
+  date endDate = date();
+  int freq = 0;
 
+  // Step 1 - find the task with the given name
   if(taskMap.find(taskName) != taskMap.end())
   {
+      // Step 2 - get all the task attributes before deleting it
       std::map<string, Task*>::iterator it = taskMap.find(taskName);
-      startDate = it->second->getStartDateString();
+      startDate = it->second->getStartDate();
       startTime = it->second->getStartTime();
       duration = it->second->getDuration();
-      taskMap.erase(taskName);
-      // cout << "task: " << name << "is deleted" <<endl;
-  }
+      type = it->second->getTypeInt();
 
-  // Look for any antiTask with the same date, time and duration
-  for (std::map<string, Task*>::const_iterator it = taskMap.begin(); it != taskMap.end(); ++it)
-  {
+      // Step 3 -  if the task is recurrent, then find all associated dates
+      f( type > 0  && type < 7)
+      {
+        endDate = it->second->getEndDate();
+        freq = it->second->getFreq();
 
-     if(( it->second->getStartDate() == date_from_iso_string(startDate)) && ( it->second->getStartTime() == startTime)
-        && (it->second->getDuration() == duration))
-         {
-           // delete antiTask
-           taskMap.erase(it->first);
-         }
-         // Cout << "Anti tasks associated with the reucrrent task is also deleted" << endl;
-  }
+        // get the number of days that the recurrent task will be repeating
+        boost::gregorian::date_duration day_range = endDate - startDate;
+        int numOfDays = day_range.days();
+        boost::gregorian::date_duration f(freq);
+        boost::gregorian::date sDate  = startDate ;
 
-  boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
-  string taskYear = boost::lexical_cast<string>(taskDate.year());
-  string taskDay = boost::lexical_cast<string>(taskDate.day_of_year());
-
-  if(TimeBlockMap.find(taskYear) != TimeBlockMap.end())
-  {
-     if(TimeBlockMap.at(taskYear).find(taskDay) != TimeBlockMap.at(taskYear).end())
-     {
-
-        int tbArraySize = static_cast<int>(duration / 0.25);
-
-        // find the index of the starting time in the timeBlock vector
-        int count = 0;
-        int indx = indexFinder(startTime);
-        int i = indx;
-        for(i = indx; i < indx + tbArraySize; i++)
+        for (int j = 0; j < numOfDays; j += freq)
         {
-          if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
+          // Step 4 - use these dates to null the associated timeblocks
+          nullTimeBlockTask(sDate, startTime, duration, endDate);
+
+          // Step 5 - use these dates  to find  associated AntiTask
+          int count = 0;
+          std::map<string, Task*>::const_iterator it = taskMap.begin();
+          for ( it ; it != taskMap.end(); ++it)
           {
-            TimeBlockMap.at(taskYear).at(taskDay).at(i).setTask(nullptr);
-            count +=1 ;
+             if( it->second->getStartDate() == sDate)
+             {
+               if(( it->second->getStartTime() == startTime) && (it->second->getDuration() == duration))
+               {
+                 // Step 6 - delete antiTask for sDate
+                 taskMap.erase(it->first);
+                 // Cout << "Anti tasks associated with the reucrrent task is also deleted" << endl;
+                 count++;
+               }
+             }
           }
+          cout <<  "Number of AntiTask that is deleted is: " << count <<endl;
+          // increment sDate = go to the next date of the recurrent task 
+          sDate  = sDate + f;
         }
-        // check to see if all the timeBlocks associated with the task is deleted
-        if (count == tbArraySize)
-          {
-            completed = true;
-            // cout << "TimeBlocks associated with the task is also deleted " << endl;
-          }
       }
+
+      // Step 7 - delete the task
+      taskMap.erase(taskName);
+      deleted = true;
+      // cout << "a transient task: " << name << "is deleted" <<endl;
   }
 
   return completed;

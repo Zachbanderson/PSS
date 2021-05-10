@@ -19,14 +19,14 @@ public:
     std::map<string, Task*> getTaskMap();
     std::map<string, std::map<string, vector<TimeBlock>>> getTBMap()
     {return TimeBlockMap;}
-    Task* getTask(const string taskName, const string taskDate) const;	
+    Task* getTask(const string taskName, const string taskDate) const;
     bool nameValid(string name);    //Name of the task. Checks if name is in
                                     //taskMap
     bool timeValid(string sDate, double sTime, double duration); //Date to validate
 
     /**************
      ** MUTATORS **
-     **************/    
+     **************/
     bool createNewTask(const string& name, const string& startDate,
                        double startTime, double duration, int type,
                        string endDate = "", int freq = 0 );
@@ -36,6 +36,8 @@ public:
     bool deleteTask(string taskName);
     bool addATask(const std::string& name, const std::string& startDate,
       double startTime, double duration);
+    bool nullTimeBlockTask(const string& startDate,
+                       double startTime, double duration, const string& endDate = "");
 
 
 private:
@@ -48,7 +50,7 @@ private:
      ***************/
     bool validateTTask(TransientTask* ttask);   //Task to validate
     bool validateRTask(RecurrentTask* rtask);   //Task to validate
-    
+
 
 
     void printTimeBlockMap();
