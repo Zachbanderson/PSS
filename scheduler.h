@@ -36,8 +36,7 @@ public:
     bool deleteTask(string taskName);
     bool addATask(const std::string& name, const std::string& startDate,
       double startTime, double duration);
-    bool nullTimeBlockTask(const string& startDate,
-                       double startTime, double duration, const string& endDate = "");
+    bool nullTimeBlockTask(const string& startDate, double startTime, double duration);
 
 
 private:
