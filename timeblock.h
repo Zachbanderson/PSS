@@ -18,7 +18,7 @@ public:
     ~TimeBlock();
 private:
     Task* task;
-    float tbStartTime;
+    double tbStartTime;
     //float increment = 0.25;
 };
 

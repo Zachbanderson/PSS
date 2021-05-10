@@ -48,7 +48,8 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
 
      cout << "Adding task" << endl;
     //check if time and name are valid
-    if (timeValid(startDate, startTime, duration) && nameValid(name))
+    boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
+    if (timeValid(taskDate, startTime, duration) && nameValid(name))
     {
         cout << "Task is valid" << endl;
         // create task
@@ -412,39 +413,42 @@ bool Scheduler::nameValid(string name)  //Name of the new task
  *       for scheduling a new task
  ***********************************************************/
 
-bool Scheduler::timeValid(string sDate, double sTime, double duration)
-{
-  // convert string startDate to a date
-    boost::gregorian::date d = boost::gregorian::date_from_iso_string(sDate);
-    string taskYear = boost::lexical_cast<string>(d.year());
+ bool Scheduler::timeValid(double date, double sTime, double duration)
+ {
+     bool valid = false;
 
-  // if YEAR is not in the TimeBlockMap return true
-    if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
-    {
-      return true;
-    }
-    // if the startDate is not in the timeBlockMap return true
-    else if(TimeBlockMap.at(taskYear).find(sDate) == TimeBlockMap.at(taskYear).end())
-    {
-      return true;
-    }
-    // if time slot is available return true
-    else
-    {
-      // check if the timeBlocks are taken
-      int tbArraySize = static_cast<int>(duration / 0.25);
+     string taskYear = boost::lexical_cast<string>(date.year());
+     string taskDay = boost::lexical_cast<string>(date.day_of_year());
 
-      // find the index of the startTime in the timeBlock vector
-      int indx = indexFinder(sTime);
-      for(int i = indx; i < tbArraySize + indx; i++)
-      {
-        if(TimeBlockMap.at(taskYear).at(sDate).at(i).getTask() != nullptr)
-        {
-          return false;
-        }
-      }
-    }
-}
+   // if YEAR is not in the TimeBlockMap return true
+     if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
+     {
+       valid = true;
+     }
+     // if the startDate is not in the timeBlockMap return true
+     else if(timeBlockMap.at(taskYear).find(taskDay) == timeBlockMap.at(taskYear).end())
+     {
+       valid = true;
+     }
+     // if taskYear and taskDay is found then check timeBlocks
+     else
+     {
+       // check if the timeBlocks are taken
+       int tbArraySize = static_cast<int>(duration / 0.25);
+
+       // find the index of the startTime in the timeBlock vector
+       int indx = indexFinder(sTime);
+       for(int i = indx; i < (tbArraySize + indx) ; i++)
+       {
+         if(timeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
+         {
+           valid = false;
+         }
+       }
+     }
+
+     return valid;
+ }
 
 /**********************************************************
  *

@@ -22,7 +22,7 @@ public:
     Task* getTask(const string taskName, const string taskDate) const;
     bool nameValid(string name);    //Name of the task. Checks if name is in
                                     //taskMap
-    bool timeValid(string sDate, double sTime, double duration); //Date to validate
+    bool timeValid(double sDate, double sTime, double duration); //if date and time available return true
 
     /**************
      ** MUTATORS **

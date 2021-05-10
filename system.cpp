@@ -122,6 +122,7 @@ void System::displayCreateMenu()
     bool validName = true;
     bool timeAvailable = true;
     string userFrequency;
+    boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string(userDate);
     do {
         cout << "Select type:\n";
         cout << "1 - Transient\n";
@@ -157,8 +158,8 @@ void System::displayCreateMenu()
 
                         }
                         else if (validDurationFormat(userDuration) == true) {
-                            
-                            if(scheduler->timeValid(userDate, convertTimeStrToFloat(userTime), convertDuration(userDuration))){
+
+                            if(scheduler->timeValid(userDateAsDate, convertTimeStrToFloat(userTime), convertDuration(userDuration))){
                                 cout << "Enter the name of the task: ";
                                 getline(cin, taskName);
                                 if (taskName.length() == 1 && taskName[0] == 'q') {
@@ -258,14 +259,14 @@ void System::displayCreateMenu()
 
                                     //AND time and date are available
 
-                                    if (scheduler->timeValid(userDate, convertTimeStrToFloat(userTime), convertDuration(userDuration))) { //time is available
+                                    if (scheduler->timeValid(userDateAsDate, convertTimeStrToFloat(userTime), convertDuration(userDuration))) { //time is available
 
                                         cout << "Enter the name of the task: ";
                                         getline(cin, taskName);
                                         if (taskName.length() == 1 && taskName[0] == 'q') {
                                             exitFlag = true;
                                         }
-                                        else if (scheduler->nameValid(taskName)) { //scheduler.nameValid(taskName) 
+                                        else if (scheduler->nameValid(taskName)) { //scheduler.nameValid(taskName)
 
                                             cout << "Select the type of task: \n";
                                             cout << "1 - Class\n2 - Study\n3 - Sleep\n4 - Exercise\n5 - Work\n6 - Meal\n";
@@ -352,8 +353,9 @@ void System::displayCreateMenu()
  ***********************************************************/
 void System::displayEditMenu()
 {
-    
-    cout << scheduler->timeValid("20200511", 17.50, 0.50) << endl;
+
+    boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string("20200511");
+    cout << scheduler->timeValid(userDateAsDate, 17.50, 0.50) << endl;
     cout << "--Edit Menu--\n";
     //cout << scheduler->deleteTask("Present this project") << endl;
     /*Task* taskToEdit = scheduler->getTask("Present this project", "20200511");
@@ -375,7 +377,6 @@ void System::displayEditMenu()
     string taskDate;
     string userInput;
     bool validInput = false;
-
     //Get info for what task the user want's to edit
     do {
         //Select task name
@@ -383,7 +384,7 @@ void System::displayEditMenu()
         do {
             cout << "What is the name of the task you want to edit? (q to exit) ";
             getline(cin, userInput);
-            
+
             if (userInput.length() == 1 && userInput[0] == 'q') {
                 return;
             }
@@ -456,7 +457,7 @@ void System::displayEditMenu()
             cout << "Invalid choice, too long.\n";
             continue;
         }
-        
+
         //Verify input is valid. Feel free to replace with better logic, my if wasn't working for some reason so I did this
         switch (userInput[0]) {
         case 'q':
@@ -528,7 +529,9 @@ void System::displayEditMenu()
 
             if (validDateFormat(userInput))//If valid date format
             {
-                if (scheduler->timeValid(userInput, tStartTime, tDuration)) //Check if time is available
+
+                boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string(userInput);
+                if (scheduler->timeValid(userDateAsDate, tStartTime, tDuration)) //Check if time is available
                 {
                     tDate = userInput;
                     validInput = true;
@@ -557,7 +560,8 @@ void System::displayEditMenu()
             }
 
             if (validTimeFormat(userInput)) {
-                if (scheduler->timeValid(tDate, convertTimeStrToFloat(userInput), tDuration))
+                boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string(tDate);
+                if (scheduler->timeValid(userDateAsDate, convertTimeStrToFloat(userInput), tDuration))
                 {
                     tStartTime = convertTimeStrToFloat(userInput);
                     validInput = true;
@@ -584,7 +588,8 @@ void System::displayEditMenu()
             }
 
             if (validDurationFormat(userInput)) {   //Input is valid
-                if (scheduler->timeValid(tDate, tStartTime, convertDuration(userInput)))//New duration doesn't create time conflict
+                boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string(tDate);
+                if (scheduler->timeValid(userDateAsDate, tStartTime, convertDuration(userInput)))//New duration doesn't create time conflict
                 {
                     tDuration = convertDuration(userInput);
                     validInput = true;
@@ -715,7 +720,7 @@ void System::displayDeleteMenu()
     cout << endl;
     deleteTask->display();    //Display task information
 
-    
+
     string userTime;
     string userDuration;
 
@@ -849,7 +854,7 @@ void System::displayCalendar()
             continue;
         }
     } while (exitFlag == false);
-    
+
     calendar->displayCalendar(date, duration, scheduler->getTBMap());
 }
 
@@ -1043,7 +1048,7 @@ double System::convertTimeStrToFloat(string userTime) {
     int intHours = stoi(hours);
     int intMins = stoi(minutes);
     double time = static_cast<double>(intHours + ((double)intMins / 60));
-    
+
     return time;
 }
 
