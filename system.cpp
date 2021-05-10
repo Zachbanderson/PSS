@@ -609,8 +609,7 @@ void System::displayEditMenu()
         validInput = false;
         do {
             cout << "Please enter the new frequency: ";
-            userInput = getIntUserInput();
-            int freq = stoi(userInput);
+            int freq = getIntUserInput();
 
             if(freq > 0){
                 tFreq = freq;
