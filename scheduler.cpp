@@ -248,7 +248,7 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
       type = it->second->getTypeInt();
 
       // Step 3 -  if the task is recurrent, then find all associated dates
-      f( type > 0  && type < 7)
+      if( type > 0  && type < 7)
       {
         endDate = it->second->getEndDate();
         freq = it->second->getFreq();
@@ -281,18 +281,29 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
              }
           }
           cout <<  "Number of AntiTask that is deleted is: " << count <<endl;
-          // increment sDate = go to the next date of the recurrent task 
+          // increment sDate = go to the next date of the recurrent task
           sDate  = sDate + f;
         }
-      }
 
-      // Step 7 - delete the task
-      taskMap.erase(taskName);
-      deleted = true;
-      // cout << "a transient task: " << name << "is deleted" <<endl;
+        // Step 7 - delete the task
+        taskMap.erase(taskName);
+        deleted = true;
+        // cout << "a recurrent task: " << name << "is deleted" <<endl;
+      }
+      // Step 8 - if task is transient
+      else if (type > 6 && type < 10)
+      {
+        // Step 9 - use these dates to null the associated timeblocks
+        nullTimeBlockTask(startDate, startTime, duration, endDate);
+
+        // Step 10 - delete the transient task
+        taskMap.erase(taskName);
+        deleted = true;
+        // cout << "a transient task: " << name << "is deleted" <<endl;
+      }
   }
 
-  return completed;
+  return deleted;
 }
 
 /**********************************************************
