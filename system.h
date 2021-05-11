@@ -23,6 +23,8 @@ public:
     void displayDeleteMenu();
 
     void displayCalendar();
+    void displayLoadMenu();
+    void displayWriteMenu();
 
     /***************
      ** UTILITY **
