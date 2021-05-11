@@ -493,6 +493,7 @@ void System::displayEditMenu()
         tFreq = static_cast<RecurrentTask*>(editTask)->getFreq();
     }
 
+    bool editDuration = false;
     switch (editChoice)
     {
     case '1':
@@ -589,6 +590,14 @@ void System::displayEditMenu()
             }
 
             if (validDurationFormat(userInput)) {   //Input is valid
+
+                if (scheduler->deleteTask(editTask->getName())) {
+                    editDuration = true;
+                }
+                else {
+                    cout << "Something went wrong.\n";
+                    return;
+                }
                 boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string(tDate);
                 if (scheduler->timeValid(userDateAsDate, tStartTime, convertDuration(userInput)))//New duration doesn't create time conflict
                 {
@@ -624,7 +633,7 @@ void System::displayEditMenu()
         break;
     }
 
-    if (scheduler->deleteTask(editTask->getName())) {
+    if (editDuration || scheduler->deleteTask(editTask->getName())) {
         if (scheduler->createNewTask(tName, tDate, tStartTime, tDuration, tType, tEndDate, tFreq)) {
             cout << "Successfully modified task.\n";
         }
