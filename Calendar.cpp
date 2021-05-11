@@ -137,7 +137,9 @@ void Calendar::displayCalendar(string date, int rangeOfDays, std::map<string,
                   double taskStartTime = TBMap.at(taskYear).at(day).at(i).getTask()->getStartTime();
                   double taskDuration = TBMap.at(taskYear).at(day).at(i).getTask()->getDuration();
                   double taskEndTime = taskStartTime + taskDuration;
-                  cout << taskStartTime << " to " << taskEndTime << ": " << taskName << endl;
+                  string taskStartTimeString = TBMap.at(taskYear).at(day).at(i).getTask()->getStartTimeString();
+                  string taskEndTimeString = convertDoubleToString(taskEndTime);
+                  cout << taskStartTimeString << " to " << taskEndTimeString << ": " << taskName << endl;
                   i += taskDuration / .25;
                 }
               }
@@ -246,3 +248,46 @@ std::map<string, Task*> Calendar::readFromFile(std::map<string,
     return taskMap;
 }
 
+string Task::convertDoubleToString(double time)
+{
+  int hours = static_cast<int>(time);
+  int minutes = static_cast<int>(time * 100) % 100;
+  string strMins;
+  switch(minutes)
+  {
+    case 25:
+      strMins = "15";
+      break;
+    case 50:
+      strMins = "30";
+      break;
+    case 75:
+      strMins = "45";
+      break;
+    default:
+      strMins = "00";
+      break;
+  }
+  
+  string convertedTime;
+  if (hours >= 13)                 // If time is 1:00 pm or more
+  {
+    hours = 0;
+    convertedTime = to_string(hours) + ":" + strMins + " PM";
+  }
+  else if (hours == 12)           // If time is noon
+  {
+    convertedTime = to_string(hours) + ":" + strMins + " PM";
+  }
+  else if (hours == 0)            // If time is midnight
+  {
+    hours = 12;
+    convertedTime = convertedTime = to_string(hours) + ":" + strMins + " AM";
+  }
+  else                            // Time is AM
+  {
+    convertedTime = to_string(hours) + ":" + strMins + " AM";
+  }
+
+  return convertedTime;
+}

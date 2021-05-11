@@ -59,7 +59,9 @@ void System::displayMainMenu()
         cout << "2 - Add a task\n";
         cout << "3 - Delete a task\n";
         cout << "4 - Edit a task\n";
-        cout << "5 - Exit\n";
+        cout << "5 - Load file\n";
+        cout << "6 - Write file\n";
+        cout << "7 - Exit\n";
         userInput = getIntUserInput();
         if (userInput == 1) {
             displayCalendar();
@@ -74,6 +76,12 @@ void System::displayMainMenu()
             displayEditMenu();
         }
         else if (userInput == 5) {
+            displayLoadMenu();
+        }
+        else if (userInput == 6) {
+            displayWriteMenu();
+        }
+        else if (userInput == 7) {
             cout << "Exiting...\n";
             exitFlag = true;
         }
@@ -491,7 +499,7 @@ void System::displayEditMenu()
         //Edit name
         validInput = false;
         do {
-            cout << "Please enter the new name? (q to exit) ";
+            cout << "Please enter the new name (q to exit) ";
             getline(cin, userInput);
 
             if (userInput.length() == 1 && userInput[0] == 'q') {
@@ -544,7 +552,7 @@ void System::displayEditMenu()
         //Edit start time
         validInput = false;
         do {
-            cout << "Please enter the new start time (Format: 13:45): ";
+            cout << "Please enter the new start time (Format: 13:45 ##:##): ";
             userInput = "";
             getline(cin, userInput);
 
@@ -602,7 +610,7 @@ void System::displayEditMenu()
         //Edit frequency
         validInput = false;
         do {
-            cout << "Please enter the new frequency: ";
+            cout << "Please enter the new frequency (1 or 7): ";
             int freq = getIntUserInput();
 
             if(freq > 0){
@@ -742,20 +750,20 @@ void System::displayDeleteMenu()
             return;
         }
         else if (userInput[0] == '1') {
-            cout << "Enter the tasks start date: ";
+            cout << "Enter the tasks start date (YYYYMMDD): ";
             getline(cin, userDate);
             if (userDate.length() == 1 && userDate[0] == 'q') {
                 return;
             }
             else if (validDateFormat(userDate)) {
-                cout << "Enter the tasks time: ";
+                cout << "Enter the tasks time (24 hour time in format ##:##): ";
                 getline(cin, userTime);
                 if (userTime.length() == 1 && userTime[0] == 'q') {
                     return;
                 }
                 else if (validTimeFormat(userTime)) {
 
-                    cout << "Enter the tasks duration: ";
+                    cout << "Enter the tasks duration in minutes: ";
                     getline(cin, userDuration);
                     if (userDuration.length() == 1 && userDuration[0] == 'q') {
                         return;
@@ -856,6 +864,42 @@ void System::displayCalendar()
     } while (exitFlag == false);
 
     calendar->displayCalendar(date, duration, scheduler->getTBMap());
+}
+
+/**********************************************************
+ *
+ * Method displayLoadMenu(): Class System
+ *_________________________________________________________
+ * This method displays the load file menu, allowing the user to
+ * load the calendar from a file
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     none
+ *
+ * POST-CONDITIONS
+ *     This function returns nothing but calendar may be populated
+ ***********************************************************/
+void System::displayLoadMenu()
+{
+
+}
+
+/**********************************************************
+ *
+ * Method displayWriteMenu(): Class System
+ *_________________________________________________________
+ * This method displays the write file menu, allowing the user to
+ * write the calendar out to a file
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     none
+ *
+ * POST-CONDITIONS
+ *     This function returns nothing but a file may be written to
+ ***********************************************************/
+void System::displayWriteMenu()
+{
+
 }
 
 /**********************************************************
