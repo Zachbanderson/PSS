@@ -204,8 +204,8 @@ bool Scheduler::addRTask(RecurrentTask* task)    //Task to add
 {
     if(validateRTask(task))
     {
-        for(boost::gregorian::date d = task->getStartDate();
-            d <= task->getEndDate(); d = d + date_duration(task->getFreq()))
+        taskMap.insert(std::pair<string, Task*>(task->getName(), task));
+        for(boost::gregorian::date d = task->getStartDate(); d <= task->getEndDate(); d = d + date_duration(task->getFreq()))
         {
             //cout << "Date is: " << d << endl;
             addTaskToTimeBlockMap(task, d, TimeBlockMap);
@@ -262,26 +262,35 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
             boost::gregorian::date_duration f(freq);
             boost::gregorian::date sDate  = startDate ;
 
-            for (int j = 0; j < numOfDays; j += freq)
+            for (int j = 0; j <= numOfDays; j += freq)
             {
                 // Step 4 - use these dates to null the associated timeblocks
                 nullTimeBlockTask(to_iso_string(sDate), startTime, duration);
 
                 // Step 5 - use these dates  to find  associated AntiTask
                 int count = 0;
-                std::map<string, Task*>::const_iterator it = taskMap.begin();
-                for ( it ; it != taskMap.end(); ++it)
+                //std::map<string, Task*>::const_iterator it = taskMap.begin();
+                for (std::map<string, Task*>::const_iterator it = taskMap.begin(); it != taskMap.end();)
                 {
-                    if( it->second->getStartDate() == sDate)
+                    if( it->second->getStartDate() == sDate && it->second->getTypeInt() == 0)
                     {
                         if(( it->second->getStartTime() == startTime) && (it->second->getDuration() == duration))
                         {
                             // Step 6 - delete antiTask for sDate
-                            taskMap.erase(it->first);
+                            it = taskMap.erase(it);
                             // Cout << "Anti tasks associated with the reucrrent task is also deleted" << endl;
                             count++;
                         }
+                        else
+                        {
+                            ++it;
+                        }
                     }
+                    else
+                    {
+                        ++it;
+                    }
+                    
                 }
                 cout <<  "Number of AntiTask that is deleted is: " << count <<endl;
                 // increment sDate = go to the next date of the recurrent task
@@ -440,13 +449,21 @@ bool Scheduler::nameValid(string name)  //Name of the new task
 
        // find the index of the startTime in the timeBlock vector
        int indx = indexFinder(sTime);
+       int countNull = 0;
        for(int i = indx; i < (tbArraySize + indx) ; i++)
        {
          if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
          {
            valid = false;
          }
+         else
+         {
+             countNull++;
+         }
        }
+       //cout << "count: " << countNull << endl;
+       //cout << "arr: " << tbArraySize << endl;
+       return countNull == tbArraySize ? true : false;
      }
 
      return valid;
