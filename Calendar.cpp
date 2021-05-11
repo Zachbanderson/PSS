@@ -248,7 +248,7 @@ std::map<string, Task*> Calendar::readFromFile(std::map<string,
     return taskMap;
 }
 
-string Task::convertDoubleToString(double time)
+string Calendar::convertDoubleToString(double time)
 {
   int hours = static_cast<int>(time);
   int minutes = static_cast<int>(time * 100) % 100;

@@ -902,7 +902,7 @@ void System::displayWriteMenu()
     bool exitFlag = false;
     string startDate = "";
     do {
-        cout << "Please enter the date you want to view the calendar from (YYYYMMDD format, 'q' to exit): ";
+        cout << "Please enter start date you want to write from (YYYYMMDD format, 'q' to exit): ";
         std::getline(cin, startDate);
 
         if (startDate.length() == 1 && startDate[0] == 'q') {//If user want's to exit
@@ -920,7 +920,7 @@ void System::displayWriteMenu()
     exitFlag = false;
     string endDate = "";
     do {
-        cout << "Please enter the date you want to view the calendar from (YYYYMMDD format, 'q' to exit): ";
+        cout << "Please enter the end date you want to write to (YYYYMMDD format, 'q' to exit): ";
         std::getline(cin, endDate);
 
         if (endDate.length() == 1 && endDate[0] == 'q') {//If user want's to exit
@@ -935,7 +935,25 @@ void System::displayWriteMenu()
         }
     } while (exitFlag == false);
 
-    //calendar->writeToFile(taskMap, );
+    exitFlag = false;
+    string fileName = "";
+    do {
+        cout << "Please enter the file name: ";
+        std::getline(cin, fileName);
+
+        if (fileName.length() == 1 && fileName[0] == 'q') {//If user want's to exit
+            cout << "Exiting...\n";
+            return;
+        }
+        else if (true) {//TODO: maybe some checks
+            exitFlag = true;
+        }
+        else {
+            continue;
+        }
+    } while (exitFlag == false);
+    
+    calendar->writeToFile(taskMap, fileName, date_from_iso_string(startDate), date_from_iso_string(endDate));
 }
 
 /**********************************************************
