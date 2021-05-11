@@ -910,7 +910,43 @@ void System::displayLoadMenu()
  ***********************************************************/
 void System::displayWriteMenu()
 {
+    bool exitFlag = false;
+    string startDate = "";
+    do {
+        cout << "Please enter the date you want to view the calendar from (YYYYMMDD format, 'q' to exit): ";
+        std::getline(cin, startDate);
 
+        if (startDate.length() == 1 && startDate[0] == 'q') {//If user want's to exit
+            cout << "Exiting...\n";
+            return;
+        }
+        else if (stringIsNumber(startDate) && validDateFormat(startDate) == true) {//If date is correctly formatted then allow exit
+            exitFlag = true;
+        }
+        else {
+            continue;
+        }
+    } while (exitFlag == false);
+
+    exitFlag = false;
+    string endDate = "";
+    do {
+        cout << "Please enter the date you want to view the calendar from (YYYYMMDD format, 'q' to exit): ";
+        std::getline(cin, endDate);
+
+        if (endDate.length() == 1 && endDate[0] == 'q') {//If user want's to exit
+            cout << "Exiting...\n";
+            return;
+        }
+        else if (stringIsNumber(endDate) && validDateFormat(endDate) == true) {//If date is correctly formatted then allow exit
+            exitFlag = true;
+        }
+        else {
+            continue;
+        }
+    } while (exitFlag == false);
+
+    //calendar->writeToFile(taskMap, );
 }
 
 /**********************************************************
