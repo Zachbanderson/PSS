@@ -17,7 +17,7 @@ public:
      ** ACCESSORS **
      ***************/
     std::map<string, Task*> getTaskMap();
-    std::map<string, std::map<string, vector<TimeBlock>>> getTBMap()
+    std::map<string, std::map<string, vector<TimeBlock>>>& getTBMap()
     {return TimeBlockMap;}
     Task* getTask(const string taskName, const string taskDate) const;
     bool nameValid(string name);    //Name of the task. Checks if name is in
@@ -36,7 +36,7 @@ public:
     bool deleteTask(string taskName);
     bool addATask(const std::string& name, const std::string& startDate,
       double startTime, double duration);
-    bool nullTimeBlockTask(const string& startDate, double startTime, double duration);
+
 
 
 private:
@@ -49,10 +49,15 @@ private:
      ***************/
     bool validateTTask(TransientTask* ttask);   //Task to validate
     bool validateRTask(RecurrentTask* rtask);   //Task to validate
-
-
-
     void printTimeBlockMap();
+
+    /**************
+     ** MUTATORS **
+     **************/
+    bool nullTimeBlockTask(const string& name,
+                           const string& startDate,
+                           double startTime,
+                           double duration);
 };
 
 #endif // SCHEDULER_H

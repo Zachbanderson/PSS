@@ -42,7 +42,7 @@ vector<TimeBlock> createTimeBlocks(Task *task)
         }
 
     }
-    cout << "Created whole vector" << endl;
+    //cout << "Created whole vector" << endl;
 
     return tbVector;
 }
@@ -73,13 +73,13 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
     //If we haven't found a task with this year yet
     if(TimeBlockMap.find(taskYear) == TimeBlockMap.end())
     {
-        cout << "Haven't found the year" << endl;
+        //cout << "Haven't found the year" << endl;
         //Inserting a blank map at the year mark
         TimeBlockMap.insert(std::pair<string, std::map<string,
                             vector<TimeBlock>>>(taskYear, std::map<string,
                                                 vector<TimeBlock>>()));
-        cout << "Inserted " << taskYear << endl;
-        cout << "Inserted " << taskDay << " at " << taskYear << endl;
+//        cout << "Inserted " << taskYear << endl;
+//        cout << "Inserted " << taskDay << " at " << taskYear << endl;
         //Creating a vector of 96 empty TimeBlocks at the day of the year
         TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
                                          (taskDay, createTimeBlocks(task)));
@@ -89,18 +89,18 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
     //If the year is in the map but the day isn't
     else if(TimeBlockMap.at(taskYear).find(taskDay) == TimeBlockMap.at(taskYear).end())
     {
-        cout << "Haven't found the day" << endl;
+        //cout << "Haven't found the day" << endl;
         TimeBlockMap.at(taskYear).insert(std::pair<string, vector<TimeBlock>>
                                          (taskDay, createTimeBlocks(task)));
-        cout << "Inserted " << taskDay << " at " << taskYear << endl;
-        cout << "Added the TimeBlocks" << endl;
+//        cout << "Inserted " << taskDay << " at " << taskYear << endl;
+//        cout << "Added the TimeBlocks" << endl;
     }
 
     //Trying to add a task on a day where there is already a scheduled task
     //This is the only time where the function may return false
     else
     {
-        cout << "Year and day already exist" << endl;
+        //cout << "Year and day already exist" << endl;
         //Checking the TimeBlocks to see if any are occupied
         for(float i = 0; i < task->getDuration(); i += .25)
         {
@@ -117,7 +117,7 @@ bool addTaskToTimeBlockMap(Task* task,     //Task that the TimeBlock points to
         {
             //This line accesses the TimeBlock at the correct place. Doesn't
             //need to search through the vector
-            cout << "Adding task at TimeBlock " << ((task->getStartTime() + i) / .25) << endl;
+            //cout << "Adding task at TimeBlock " << ((task->getStartTime() + i) / .25) << endl;
             TimeBlockMap.at(taskYear).at(taskDay).at
                     (((task->getStartTime() + i) / .25)).setTask(task);
         }
