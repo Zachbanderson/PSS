@@ -32,6 +32,23 @@ public:
      **************/
     std::map<string, Task*> readFromFile(std::map<string, std::map<string, vector<TimeBlock>>> &TBMap, string fname); //JSON file with data
 
+    /**********************************************************
+	*
+	* Method convertDoubleToString(double time): Class Calendar
+	*_________________________________________________________
+	* This method converts American time in a double
+    * (ex. 3:15 AM) into a string
+	* that our program can work with
+	*_________________________________________________________
+	* PRE-CONDITIONS
+	*     time: a double
+	*
+	* POST-CONDITIONS
+	*     This function returns the time rounded to the nearest as a
+	*	   24-hour system rounded to the nearest .15 for minutes
+	***********************************************************/
+	std::string convertDoubleToString(double time);
+
 private:
     string dataName = "data.json";      //Output file name
 
