@@ -22,7 +22,7 @@ public:
      ** ACCESSORS **
      ***************/
     void writeToFile(std::map<string, Task*> taskMap,   //Tasks to write
-                     string fname);  //File to write to
+                     string fname, date start, date end);  //File to write to
     void displayCalendar(string date, int rangeOfDays,
                          std::map<string, std::map<string,
                          vector<TimeBlock>>> &TBMap);

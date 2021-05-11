@@ -51,17 +51,6 @@ System::~System()
  ***********************************************************/
 void System::displayMainMenu()
 {
-    if (scheduler->createNewTask("Present this project", "20200511", 17.50,
-        .50, 9))
-    {
-        cout << "We added the task" << endl;
-    }
-    else
-    {
-        cout << "Conflict" << endl;
-    }
-    //cout << scheduler->getTask("Intern Interview", "20200428")->getName() << endl;
-    calendar->displayCalendar("20200415", 60, map);
     int userInput;
     bool exitFlag = false;
     do {

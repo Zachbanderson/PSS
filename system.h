@@ -34,7 +34,7 @@ public:
     bool stringIsNumber(string in);
     int stringToInt(const string in);
     int getIntUserInput();
-    double System::convertTimeStrToFloat(string userTime);
+    double convertTimeStrToFloat(string userTime);
 
 private:
     Scheduler* scheduler;

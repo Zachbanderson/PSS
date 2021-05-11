@@ -24,15 +24,18 @@ Calendar::Calendar()
  * POST-CONDITIONS
  *     This function writes the tasks to a file. Returns nothing
  ***********************************************************/
-void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
+void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname, date start, date end)
 {
     string serialized = "[";
     std::map<string, Task*>::iterator it = taskMap.begin();
     serialized += it->second->serialize();
     for(++it; it != taskMap.end(); it++)
     {
-        cout << "Name of the task is " << it->second->getName() << endl;
-        serialized += "," + it->second->serialize();      
+        if(it->second->getStartDate() >= start && it->second->getStartDate() <= end)
+        //cout << "Name of the task is " << it->second->getName() << endl;
+            serialized += "," + it->second->serialize();
+        else if(it->second->getStartDate() > end)
+            break;
     }
     serialized += "]";
     //cout << serialized << endl;

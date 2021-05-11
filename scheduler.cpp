@@ -23,7 +23,7 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
     this->taskMap = taskMap;
     TimeBlockMap = TBMap;
 
-    printTimeBlockMap();
+    //printTimeBlockMap();
 }
 
 
@@ -97,7 +97,7 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
 
    // if we successfuly null one instance of the recurrent task
    // then we will create antiTask and add it to the taskMap
-   if(nullTimeBlockTask(startDate, startTime, duration))
+   if(nullTimeBlockTask(name, startDate, startTime, duration))
    {
      // create anti task
      AntiTask task = AntiTask(name, startDate, startTime, duration );
@@ -125,7 +125,7 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
   *     This function returns true if it successfuly nulls
   *     the task inside the TimeBlockMap
   ***********************************************************/
- bool Scheduler::nullTimeBlockTask(const string& startDate, double startTime, double duration)
+ bool Scheduler::nullTimeBlockTask(const string& name, const string& startDate, double startTime, double duration)
 {
     bool completed = false;
     boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
@@ -144,7 +144,8 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
             int i = indx;
             for(i = indx; i < indx + tbArraySize; i++)
             {
-                if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr)
+                if(TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask() != nullptr
+                        && TimeBlockMap.at(taskYear).at(taskDay).at(i).getTask()->getName() == name)
                 {
                     TimeBlockMap.at(taskYear).at(taskDay).at(i).setTask(nullptr);
                     count +=1 ;
@@ -265,7 +266,7 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
             for (int j = 0; j <= numOfDays; j += freq)
             {
                 // Step 4 - use these dates to null the associated timeblocks
-                nullTimeBlockTask(to_iso_string(sDate), startTime, duration);
+                nullTimeBlockTask(taskName, to_iso_string(sDate), startTime, duration);
 
                 // Step 5 - use these dates  to find  associated AntiTask
                 int count = 0;
@@ -306,7 +307,7 @@ bool Scheduler::deleteTask(string taskName) //Task to delete
         else if (type > 6 && type < 10)
         {
             // Step 9 - use these dates to null the associated timeblocks
-            nullTimeBlockTask(to_iso_string(startDate), startTime, duration);
+            nullTimeBlockTask(taskName, to_iso_string(startDate), startTime, duration);
 
             // Step 10 - delete the transient task
             taskMap.erase(taskName);
