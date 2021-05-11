@@ -24,22 +24,74 @@ Calendar::Calendar()
  * POST-CONDITIONS
  *     This function writes the tasks to a file. Returns nothing
  ***********************************************************/
-void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname, date start, date end)
+void Calendar::writeToFile(std::map<string, Task*> taskMap, string fname)
 {
     string serialized = "[";
     std::map<string, Task*>::iterator it = taskMap.begin();
     serialized += it->second->serialize();
     for(++it; it != taskMap.end(); it++)
     {
-        if(it->second->getStartDate() >= start && it->second->getStartDate() <= end)
         //cout << "Name of the task is " << it->second->getName() << endl;
-            serialized += "," + it->second->serialize();
-        else if(it->second->getStartDate() > end)
-            break;
+        serialized += "," + it->second->serialize();
     }
     serialized += "]";
     //cout << serialized << endl;
 
+    json written = json::parse(serialized);
+    string pretty = written.dump(2);
+
+    ofstream outfile(fname);
+    outfile << pretty;
+    outfile.close();
+}
+
+/**********************************************************
+ *
+ * Method timeBlockToFile(): Class Calendar
+ *_________________________________________________________
+ * This method writes the tasks in JSON form to a file
+ *_________________________________________________________
+ * PRE-CONDITIONS
+ *     TBM(std::map<string, std::map<string, vector<TimeBlock>>>&)-TimeBlock map
+ *     fname(string)-Name of the file to write to
+ *     start(boost::gregorian::date)-Date to start writing
+ *
+ * POST-CONDITIONS
+ *     This function writes the tasks to a file. Returns nothing
+ ***********************************************************/
+void Calendar::timeBlockToFile(std::map<string, std::map<string,
+                               vector<TimeBlock>>>& TBM, string fname, date start, date end)
+{
+    string serialized = "[";
+    for(std::map<string, std::map<string, vector<TimeBlock>>>::iterator it =
+        TBM.begin(); it != TBM.end(); it++)
+    {
+        if(atoi(it->first.c_str()) >= atoi(boost::lexical_cast<string>(start.year()).c_str()) && atoi(it->first.c_str()) <= atoi(boost::lexical_cast<string>(end.year()).c_str()))
+        {
+            for(std::map<string, vector<TimeBlock>>::iterator it2 =
+                it->second.begin(); it2 != it->second.end(); it2++)
+            {
+                if(atoi(it2->first.c_str()) >= atoi(boost::lexical_cast<string>(start.day_of_year()).c_str()) &&
+                        atoi(it2->first.c_str()) <= atoi(boost::lexical_cast<string>(end.day_of_year()).c_str()))
+                {
+                    for(int i = 0; i < it2->second.size();)
+                    {
+                        if(it2->second.at(i).getTask() != nullptr)
+                        {
+                            serialized += it2->second.at(i).getTask()->serialize() + ",";
+                            i += it2->second.at(i).getTask()->getDuration() / .25;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    serialized = serialized.substr(0, serialized.find_last_of(','));
+    serialized += "]";
     json written = json::parse(serialized);
     string pretty = written.dump(2);
 
@@ -272,7 +324,7 @@ string Calendar::convertDoubleToString(double time)
   string convertedTime;
   if (hours >= 13)                 // If time is 1:00 pm or more
   {
-    hours = 0;
+    hours -= 12;
     convertedTime = to_string(hours) + ":" + strMins + " PM";
   }
   else if (hours == 12)           // If time is noon

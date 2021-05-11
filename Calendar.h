@@ -22,7 +22,9 @@ public:
      ** ACCESSORS **
      ***************/
     void writeToFile(std::map<string, Task*> taskMap,   //Tasks to write
-                     string fname, date start, date end);  //File to write to
+                     string fname);  //File to write to
+    void timeBlockToFile(std::map<string, std::map<string,
+                         vector<TimeBlock>>>& TBM, string fname, date start, date end);
     void displayCalendar(string date, int rangeOfDays,
                          std::map<string, std::map<string,
                          vector<TimeBlock>>> &TBMap);
@@ -47,7 +49,7 @@ public:
 	*     This function returns the time rounded to the nearest as a
 	*	   24-hour system rounded to the nearest .15 for minutes
 	***********************************************************/
-	std::string Calendar::convertDoubleToString(double time);
+    std::string convertDoubleToString(double time);
 
 private:
     string dataName = "data.json";      //Output file name

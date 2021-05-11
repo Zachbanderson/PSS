@@ -953,7 +953,7 @@ void System::displayWriteMenu()
         }
     } while (exitFlag == false);
     
-    calendar->writeToFile(taskMap, fileName, date_from_iso_string(startDate), date_from_iso_string(endDate));
+    calendar->timeBlockToFile(scheduler->getTBMap(), fileName, date_from_iso_string(startDate), date_from_iso_string(endDate));
 }
 
 /**********************************************************
