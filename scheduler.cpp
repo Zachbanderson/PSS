@@ -46,12 +46,12 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
    double startTime, double duration, int intType, string endDate, int freq)
 {
 
-     cout << "Adding task" << endl;
+    //cout << "Adding task" << endl;
     //check if time and name are valid
     boost::gregorian::date taskDate = boost::gregorian::date_from_iso_string(startDate);
     if (timeValid(taskDate, startTime, duration) && nameValid(name))
     {
-        cout << "Task is valid" << endl;
+        //cout << "Task is valid" << endl;
         // create task
         if( intType >= 1 && intType <= 6)
         {
@@ -154,7 +154,7 @@ Scheduler::Scheduler(std::map<string, Task*> &taskMap,  //Map of tasks
             // check to see if all the timeBlocks associated with the task is deleted
             if (count == tbArraySize)
                 {
-                    cout << count << " = number of timeblocks that were nulled." << endl;
+                    //cout << count << " = number of timeblocks that were nulled." << endl;
                     completed = true;
                     // cout << "TimeBlocks associated with the task is also deleted " << endl;
                 }
@@ -182,7 +182,7 @@ bool Scheduler::addTTask(TransientTask* task)    //Task to add
     if(addTaskToTimeBlockMap(task, task->getStartDate(), TimeBlockMap))
     {
         taskMap.insert(std::pair<string, Task*>(task->getName(), task));
-        cout << "Added to TimeBlockMap. Returning true" << endl;
+        //cout << "Added to TimeBlockMap. Returning true" << endl;
         return true;
     }
     return false;

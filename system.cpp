@@ -174,7 +174,7 @@ void System::displayCreateMenu()
                                         cout << "Scheduling a task with name: " << taskName << "\nDuration: " << userDuration << "\nStart date: " << userDate << "\nTime: " << userTime << "\nType: " << stoi(taskType) << "\n";
                                         bool succ;
                                         succ = scheduler->createNewTask(taskName, userDate, convertTimeStrToFloat(userTime), convertDuration(userDuration), (stoi(taskType) + 6), userDate, 1);
-                                        cout << succ << endl;
+                                        //cout << succ << endl;
                                         exitFlag = true;
 
 
@@ -351,7 +351,7 @@ void System::displayEditMenu()
 {
 
     boost::gregorian::date userDateAsDate = boost::gregorian::date_from_iso_string("20200511");
-    cout << scheduler->timeValid(userDateAsDate, 17.50, 0.50) << endl;
+    //cout << scheduler->timeValid(userDateAsDate, 17.50, 0.50) << endl;
     cout << "--Edit Menu--\n";
     //cout << scheduler->deleteTask("Present this project") << endl;
     /*Task* taskToEdit = scheduler->getTask("Present this project", "20200511");
